@@ -103,9 +103,21 @@
             ],
             "scripts": []
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
+            ]
+          }
         }
       }
     }
   },
-  "defaultProject": "ng-pomodoro-timer-v2"
+  "defaultProject": "ng-pomodoro-timer-v2",
+  "cli": {
+    "defaultCollection": "@angular-eslint/schematics"
+  }
 }
