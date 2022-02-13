@@ -9,7 +9,9 @@
     "test": "ng test",
     "lint": "ng lint",
     "prepare": "husky install",
-    "cspell": "cspell src/**/*.{ts,js}"
+    "cspell": "cspell src/**/*.{ts,js}",
+    "deploy": "ng deploy",
+    "deploy:dryrun": "ng deploy --dry-run"
   },
   "private": true,
   "dependencies": {
