@@ -1,24 +1,17 @@
 {
   "root": true,
-  "ignorePatterns": [
-    "projects/**/*"
-  ],
+  "ignorePatterns": ["projects/**/*"],
   "overrides": [
     {
-      "files": [
-        "*.ts"
-      ],
+      "files": ["*.ts"],
       "parserOptions": {
-        "project": [
-          "tsconfig.json"
-        ],
+        "project": ["tsconfig.json"],
         "createDefaultProgram": true
       },
       "extends": [
         "plugin:@angular-eslint/recommended",
         "plugin:@angular-eslint/template/process-inline-templates",
         "plugin:prettier/recommended",
-        "eslint:recommended",
         "plugin:import/recommended",
         "plugin:import/typescript",
         "plugin:storybook/recommended"
@@ -40,7 +33,16 @@
             "style": "kebab-case"
           }
         ],
-        "prettier/prettier": ["error", { "printWidth": 140, "trailingComma": "all", "tabWidth": 2, "semi": false, "singleQuote": true }]
+        "prettier/prettier": [
+          "error",
+          {
+            "printWidth": 140,
+            "trailingComma": "all",
+            "tabWidth": 2,
+            "semi": false,
+            "singleQuote": true
+          }
+        ]
       },
       "settings": {
         "import/parsers": {
@@ -54,13 +56,8 @@
       }
     },
     {
-      "files": [
-        "*.html"
-      ],
-      "extends": [
-        "plugin:@angular-eslint/template/recommended",
-        "plugin:prettier/recommended"
-      ],
+      "files": ["*.html"],
+      "extends": ["plugin:@angular-eslint/template/recommended"],
       "rules": {}
     }
   ]

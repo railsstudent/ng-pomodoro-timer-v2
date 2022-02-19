@@ -7,7 +7,9 @@
     "compodoc",
     "noopener",
     "noreferrer",
-    "viewports"
+    "viewports",
+    "fortawesome",
+    "fontawesome"
   ],
   "flagWords": ["hte"]
 }
