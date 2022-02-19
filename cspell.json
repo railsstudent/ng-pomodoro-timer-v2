@@ -1,6 +1,13 @@
 {
   "version": "0.2",
   "language": "en",
-  "words": ["pomodoro", "tailwindcss"],
+  "words": [
+    "pomodoro",
+    "tailwindcss",
+    "compodoc",
+    "noopener",
+    "noferrer",
+    "viewports"
+  ],
   "flagWords": ["hte"]
 }
