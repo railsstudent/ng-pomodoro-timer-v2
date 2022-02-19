@@ -6,7 +6,7 @@
     "tailwindcss",
     "compodoc",
     "noopener",
-    "noferrer",
+    "noreferrer",
     "viewports"
   ],
   "flagWords": ["hte"]
