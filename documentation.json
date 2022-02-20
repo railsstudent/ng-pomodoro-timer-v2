@@ -51,7 +51,7 @@
     },
     {
       "name": "AppShellComponent",
-      "id": "component-AppShellComponent-65aa849c757d11c525a81057fc14cabf12e43c08a8cc2bedd2009459caec8b3c170e1671d680234be1bb5c821a2a96f413ebe208d1cc771fbc30f6ca48b48ed1",
+      "id": "component-AppShellComponent-49ec7bb5506c627010bde96c0236c6fd543c83eecfb35174b0ad005fdfd224809394934a8368a8eddfe2d636aa93fa6c66477d68ed641eee459f37439217150a",
       "file": "src/app/app-shell/app-shell.component.ts",
       "encapsulation": [],
       "entryComponents": [],
@@ -59,9 +59,12 @@
       "outputs": [],
       "providers": [],
       "selector": "app-shell",
-      "styleUrls": ["./app-shell.component.scss"],
-      "styles": [],
-      "templateUrl": ["./app-shell.component.html"],
+      "styleUrls": [],
+      "styles": [
+        "\n      :host {\n        display: block;\n        height: 100vh;\n      }\n    "
+      ],
+      "template": "<div class=\"h-full bg-sky-400\">\n  <p>app-shell works!</p>\n</div>\n",
+      "templateUrl": [],
       "viewProviders": [],
       "inputsClass": [],
       "outputsClass": [],
@@ -73,7 +76,7 @@
           "optional": false,
           "returnType": "void",
           "typeParameters": [],
-          "line": 9,
+          "line": 20,
           "deprecated": false,
           "deprecationMessage": ""
         }
@@ -85,17 +88,11 @@
       "description": "",
       "rawdescription": "\n",
       "type": "component",
-      "sourceCode": "import { Component, OnInit } from '@angular/core'\n\n@Component({\n  selector: 'app-shell',\n  templateUrl: './app-shell.component.html',\n  styleUrls: ['./app-shell.component.scss'],\n})\nexport class AppShellComponent implements OnInit {\n  ngOnInit(): void {\n    console.log('ddd')\n  }\n}\n",
+      "sourceCode": "import { Component, OnInit } from '@angular/core'\n\n@Component({\n  selector: 'app-shell',\n  template: `\n    <div class=\"h-full bg-sky-400\">\n      <p>app-shell works!</p>\n    </div>\n  `,\n  styles: [\n    `\n      :host {\n        display: block;\n        height: 100vh;\n      }\n    `,\n  ],\n})\nexport class AppShellComponent implements OnInit {\n  ngOnInit(): void {\n    console.log('ddd')\n  }\n}\n",
       "assetsDirs": [],
-      "styleUrlsData": [
-        {
-          "data": "",
-          "styleUrl": "./app-shell.component.scss"
-        }
-      ],
-      "stylesData": "",
-      "implements": ["OnInit"],
-      "templateData": "<p>app-shell works!</p>\n"
+      "styleUrlsData": "",
+      "stylesData": "\n      :host {\n        display: block;\n        height: 100vh;\n      }\n    \n",
+      "implements": ["OnInit"]
     }
   ],
   "modules": [
