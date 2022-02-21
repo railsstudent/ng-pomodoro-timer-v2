@@ -1,5 +1,78 @@
 {
-  "pipes": [],
+  "pipes": [
+    {
+      "name": "ConvertSecondsToStringPipe",
+      "id": "pipe-ConvertSecondsToStringPipe-fcd385f8f69dfb48087da84cf7b42e2f348f01f36a263ef6dafca51d42335cf884e28b8d5c5c91dbf0431f84811cd1d3a24e90bbf37ce8db963bdfb9ae5c3b35",
+      "file": "src/app/timer/timer-display/convert-seconds-to-string.pipe.ts",
+      "type": "pipe",
+      "deprecated": false,
+      "deprecationMessage": "",
+      "description": "",
+      "rawdescription": "\n",
+      "properties": [],
+      "methods": [
+        {
+          "name": "getPrefix",
+          "args": [
+            {
+              "name": "value",
+              "type": "number",
+              "deprecated": false,
+              "deprecationMessage": ""
+            }
+          ],
+          "optional": false,
+          "returnType": "\"0\" | \"\"",
+          "typeParameters": [],
+          "line": 7,
+          "deprecated": false,
+          "deprecationMessage": "",
+          "modifierKind": [121],
+          "jsdoctags": [
+            {
+              "name": "value",
+              "type": "number",
+              "deprecated": false,
+              "deprecationMessage": "",
+              "tagName": {
+                "text": "param"
+              }
+            }
+          ]
+        },
+        {
+          "name": "transform",
+          "args": [
+            {
+              "name": "totalSeconds",
+              "type": "number",
+              "deprecated": false,
+              "deprecationMessage": ""
+            }
+          ],
+          "optional": false,
+          "returnType": "string",
+          "typeParameters": [],
+          "line": 12,
+          "deprecated": false,
+          "deprecationMessage": "",
+          "jsdoctags": [
+            {
+              "name": "totalSeconds",
+              "type": "number",
+              "deprecated": false,
+              "deprecationMessage": "",
+              "tagName": {
+                "text": "param"
+              }
+            }
+          ]
+        }
+      ],
+      "ngname": "convertSecondsToString",
+      "sourceCode": "import { Pipe, PipeTransform } from '@angular/core'\n\n@Pipe({\n  name: 'convertSecondsToString',\n})\nexport class ConvertSecondsToStringPipe implements PipeTransform {\n  private getPrefix(value: number) {\n    const ten = 10\n    return value < ten ? '0' : ''\n  }\n\n  transform(totalSeconds: number): string {\n    const secondsPerMinute = 60\n\n    const minutes = Math.floor(totalSeconds / secondsPerMinute)\n    const seconds = totalSeconds - minutes * secondsPerMinute\n\n    const strMinutes = `${this.getPrefix(minutes)}${minutes}`\n    const strSeconds = `${this.getPrefix(seconds)}${seconds}`\n\n    return `${strMinutes}:${strSeconds}`\n  }\n}\n"
+    }
+  ],
   "interfaces": [],
   "injectables": [],
   "guards": [],
@@ -9,7 +82,7 @@
   "components": [
     {
       "name": "AppComponent",
-      "id": "component-AppComponent-e48606d5ba14f121239cda13dea93e7935a1fcdcde8900ba2b144abbae972ceb4e0de40eaa9c386ef3bc0f01bb8bade8d77629ee7fce9ce1a54efa778f513d72",
+      "id": "component-AppComponent-d402d765962ae6eb135b0f33cfbd3388200bbd16542b40cbcae15d432f0ed564fbdc70e7e4439ea540e4dc032ce3513f711837ec35fa4f5cc3d9e9f7059026f2",
       "file": "src/app/app.component.ts",
       "encapsulation": [],
       "entryComponents": [],
@@ -19,7 +92,7 @@
       "selector": "app-root",
       "styleUrls": [],
       "styles": [],
-      "template": "<app-shell></app-shell>",
+      "template": "<app-timer-shell></app-timer-shell>",
       "templateUrl": [],
       "viewProviders": [],
       "inputsClass": [],
@@ -44,31 +117,82 @@
       "description": "",
       "rawdescription": "\n",
       "type": "component",
-      "sourceCode": "import { Component } from '@angular/core'\n\n@Component({\n  selector: 'app-root',\n  template: '<app-shell></app-shell>',\n})\nexport class AppComponent {\n  title = 'ng-pomodoro-timer-v2.0'\n}\n",
+      "sourceCode": "import { Component } from '@angular/core'\n\n@Component({\n  selector: 'app-root',\n  template: '<app-timer-shell></app-timer-shell>',\n})\nexport class AppComponent {\n  title = 'ng-pomodoro-timer-v2.0'\n}\n",
       "assetsDirs": [],
       "styleUrlsData": "",
       "stylesData": ""
     },
     {
-      "name": "AppShellComponent",
-      "id": "component-AppShellComponent-49ec7bb5506c627010bde96c0236c6fd543c83eecfb35174b0ad005fdfd224809394934a8368a8eddfe2d636aa93fa6c66477d68ed641eee459f37439217150a",
-      "file": "src/app/app-shell/app-shell.component.ts",
+      "name": "TimerDisplayComponent",
+      "id": "component-TimerDisplayComponent-1e4440c242cdfb69a0fbd6990cbdfcc1101edc1e737e8cf2e15971386c129760bd7d0905fa66757e37f1909ac6ac208010bb70a8f8cb9e9abb7eee05be810649",
+      "file": "src/app/timer/timer-display/timer-display.component.ts",
       "encapsulation": [],
       "entryComponents": [],
       "inputs": [],
       "outputs": [],
       "providers": [],
-      "selector": "app-shell",
+      "selector": "app-timer-display",
+      "styleUrls": [],
+      "styles": ["\n      :host {\n        display: block;\n      }\n    "],
+      "template": "<div class=\"p-4\">\n  <p class=\"text-[12rem] text-pink-800 text-center\">\n    {{ totalSeconds | convertSecondsToString }}\n  </p>\n</div>\n",
+      "templateUrl": [],
+      "viewProviders": [],
+      "inputsClass": [
+        {
+          "name": "totalSeconds",
+          "deprecated": false,
+          "deprecationMessage": "",
+          "line": 22,
+          "type": "number",
+          "decorators": []
+        }
+      ],
+      "outputsClass": [],
+      "propertiesClass": [],
+      "methodsClass": [],
+      "deprecated": false,
+      "deprecationMessage": "",
+      "hostBindings": [],
+      "hostListeners": [],
+      "description": "",
+      "rawdescription": "\n",
+      "type": "component",
+      "sourceCode": "import { Component, Input } from '@angular/core'\n\n@Component({\n  selector: 'app-timer-display',\n  template: `\n    <div class=\"p-4\">\n      <p class=\"text-[12rem] text-pink-800 text-center\">\n        {{ totalSeconds | convertSecondsToString }}\n      </p>\n    </div>\n  `,\n  styles: [\n    `\n      :host {\n        display: block;\n      }\n    `,\n  ],\n})\nexport class TimerDisplayComponent {\n  @Input()\n  totalSeconds: number\n}\n",
+      "assetsDirs": [],
+      "styleUrlsData": "",
+      "stylesData": "\n      :host {\n        display: block;\n      }\n    \n"
+    },
+    {
+      "name": "TimerShellComponent",
+      "id": "component-TimerShellComponent-8b1a6ec5135e2d8dd656ea0e0a7283707dd4695a3a2406b6ad849a20722ab88f65da2f0a77a8bd8b6ce3b8ff49c1a5781e8cc3bd8ec3a859023e2dfa6b9ee29a",
+      "file": "src/app/timer/timer-shell/timer-shell.component.ts",
+      "encapsulation": [],
+      "entryComponents": [],
+      "inputs": [],
+      "outputs": [],
+      "providers": [],
+      "selector": "app-timer-shell",
       "styleUrls": [],
       "styles": [
         "\n      :host {\n        display: block;\n        height: 100vh;\n      }\n    "
       ],
-      "template": "<div class=\"h-full bg-sky-400\">\n  <p>app-shell works!</p>\n</div>\n",
+      "template": "<div class=\"h-full bg-sky-400\">\n  <p>app-shell works!</p>\n  <app-timer-display [totalSeconds]=\"totalSeconds\"></app-timer-display>\n</div>\n",
       "templateUrl": [],
       "viewProviders": [],
       "inputsClass": [],
       "outputsClass": [],
-      "propertiesClass": [],
+      "propertiesClass": [
+        {
+          "name": "totalSeconds",
+          "defaultValue": "900",
+          "deprecated": false,
+          "deprecationMessage": "",
+          "type": "number",
+          "optional": false,
+          "description": "",
+          "line": 21
+        }
+      ],
       "methodsClass": [
         {
           "name": "ngOnInit",
@@ -76,7 +200,7 @@
           "optional": false,
           "returnType": "void",
           "typeParameters": [],
-          "line": 20,
+          "line": 23,
           "deprecated": false,
           "deprecationMessage": ""
         }
@@ -88,7 +212,7 @@
       "description": "",
       "rawdescription": "\n",
       "type": "component",
-      "sourceCode": "import { Component, OnInit } from '@angular/core'\n\n@Component({\n  selector: 'app-shell',\n  template: `\n    <div class=\"h-full bg-sky-400\">\n      <p>app-shell works!</p>\n    </div>\n  `,\n  styles: [\n    `\n      :host {\n        display: block;\n        height: 100vh;\n      }\n    `,\n  ],\n})\nexport class AppShellComponent implements OnInit {\n  ngOnInit(): void {\n    console.log('ddd')\n  }\n}\n",
+      "sourceCode": "import { Component, OnInit } from '@angular/core'\n\n@Component({\n  selector: 'app-timer-shell',\n  template: `\n    <div class=\"h-full bg-sky-400\">\n      <p>app-shell works!</p>\n      <app-timer-display [totalSeconds]=\"totalSeconds\"></app-timer-display>\n    </div>\n  `,\n  styles: [\n    `\n      :host {\n        display: block;\n        height: 100vh;\n      }\n    `,\n  ],\n})\nexport class TimerShellComponent implements OnInit {\n  totalSeconds = 900\n\n  ngOnInit(): void {\n    console.log('ddd')\n  }\n}\n",
       "assetsDirs": [],
       "styleUrlsData": "",
       "stylesData": "\n      :host {\n        display: block;\n        height: 100vh;\n      }\n    \n",
@@ -98,13 +222,13 @@
   "modules": [
     {
       "name": "AppModule",
-      "id": "module-AppModule-999ed35fb11f1d8baa6bc3370f7ad30dcf2b807312335533f0dd3b45f26dcfcd3320a68efa4cc0bc1b86323494aad8a6d3153388216d19c5c55edae647686bff",
+      "id": "module-AppModule-394d28833d02efa6468b09e24f349f727ee5f0d4e017d330b661acc96ef041e5c46f4fc525d7aca4a021485de577144985908dc9546cf553c64c8185bfa5a8e0",
       "description": "",
       "deprecationMessage": "",
       "deprecated": false,
       "file": "src/app/app.module.ts",
       "methods": [],
-      "sourceCode": "import { NgModule } from '@angular/core'\nimport { BrowserModule } from '@angular/platform-browser'\n\nimport { AppComponent } from './app.component'\nimport { FontAwesomeModule } from '@fortawesome/angular-fontawesome'\nimport { AppShellComponent } from './app-shell'\n\n@NgModule({\n  declarations: [AppComponent, AppShellComponent],\n  imports: [BrowserModule, FontAwesomeModule],\n  providers: [],\n  bootstrap: [AppComponent],\n})\nexport class AppModule {}\n",
+      "sourceCode": "import { NgModule } from '@angular/core'\nimport { BrowserModule } from '@angular/platform-browser'\n\nimport { AppComponent } from './app.component'\nimport { FontAwesomeModule } from '@fortawesome/angular-fontawesome'\nimport { TimerModule } from './timer'\n\n@NgModule({\n  declarations: [AppComponent],\n  imports: [BrowserModule, FontAwesomeModule, TimerModule],\n  providers: [],\n  bootstrap: [AppComponent],\n})\nexport class AppModule {}\n",
       "children": [
         {
           "type": "providers",
@@ -115,15 +239,16 @@
           "elements": [
             {
               "name": "AppComponent"
-            },
-            {
-              "name": "AppShellComponent"
             }
           ]
         },
         {
           "type": "imports",
-          "elements": []
+          "elements": [
+            {
+              "name": "TimerModule"
+            }
+          ]
         },
         {
           "type": "exports",
@@ -136,6 +261,145 @@
               "name": "AppComponent"
             }
           ]
+        },
+        {
+          "type": "classes",
+          "elements": []
+        }
+      ]
+    },
+    {
+      "name": "TimerDisplayModule",
+      "id": "module-TimerDisplayModule-1c929e346011f93c5c6910ef6fd4fa64885b13cd38f48f3bf89fe4d4f26aa042f883c766387169d044767c9a417bb823b7681f256cadb62a7be33a8f888571af",
+      "description": "",
+      "deprecationMessage": "",
+      "deprecated": false,
+      "file": "src/app/timer/timer-display/timer-display.module.ts",
+      "methods": [],
+      "sourceCode": "import { NgModule } from '@angular/core'\nimport { CommonModule } from '@angular/common'\nimport { ConvertSecondsToStringPipe } from './convert-seconds-to-string.pipe'\nimport { TimerDisplayComponent } from './timer-display.component'\n\n@NgModule({\n  declarations: [TimerDisplayComponent, ConvertSecondsToStringPipe],\n  imports: [CommonModule],\n  exports: [TimerDisplayComponent],\n})\nexport class TimerDisplayModule {}\n",
+      "children": [
+        {
+          "type": "providers",
+          "elements": []
+        },
+        {
+          "type": "declarations",
+          "elements": [
+            {
+              "name": "ConvertSecondsToStringPipe"
+            },
+            {
+              "name": "TimerDisplayComponent"
+            }
+          ]
+        },
+        {
+          "type": "imports",
+          "elements": []
+        },
+        {
+          "type": "exports",
+          "elements": [
+            {
+              "name": "TimerDisplayComponent"
+            }
+          ]
+        },
+        {
+          "type": "bootstrap",
+          "elements": []
+        },
+        {
+          "type": "classes",
+          "elements": []
+        }
+      ]
+    },
+    {
+      "name": "TimerModule",
+      "id": "module-TimerModule-9f076fbe4278d641ea6e0dbe699cf64e3dee03585662af0b7488ea89e461355b15a8a99ed18558e863f7524d181be7bb03e2f7f381cb9473a905e921f5ecab85",
+      "description": "",
+      "deprecationMessage": "",
+      "deprecated": false,
+      "file": "src/app/timer/timer.module.ts",
+      "methods": [],
+      "sourceCode": "import { NgModule } from '@angular/core'\nimport { CommonModule } from '@angular/common'\nimport { TimerShellModule } from './timer-shell'\n\n@NgModule({\n  declarations: [],\n  imports: [CommonModule, TimerShellModule],\n  exports: [TimerShellModule],\n})\nexport class TimerModule {}\n",
+      "children": [
+        {
+          "type": "providers",
+          "elements": []
+        },
+        {
+          "type": "declarations",
+          "elements": []
+        },
+        {
+          "type": "imports",
+          "elements": [
+            {
+              "name": "TimerShellModule"
+            }
+          ]
+        },
+        {
+          "type": "exports",
+          "elements": [
+            {
+              "name": "TimerShellModule"
+            }
+          ]
+        },
+        {
+          "type": "bootstrap",
+          "elements": []
+        },
+        {
+          "type": "classes",
+          "elements": []
+        }
+      ]
+    },
+    {
+      "name": "TimerShellModule",
+      "id": "module-TimerShellModule-60b632a005483940622f5dec2e288f4e416a1ea58797f058e53be2915a60f8eafa12ec55991c01db1d341b2a4107fd34a2896827502e75713983006113270f2e",
+      "description": "",
+      "deprecationMessage": "",
+      "deprecated": false,
+      "file": "src/app/timer/timer-shell/timer-shell.module.ts",
+      "methods": [],
+      "sourceCode": "import { NgModule } from '@angular/core'\nimport { CommonModule } from '@angular/common'\nimport { TimerShellComponent } from './timer-shell.component'\nimport { TimerDisplayModule } from '../timer-display'\n\n@NgModule({\n  declarations: [TimerShellComponent],\n  imports: [CommonModule, TimerDisplayModule],\n  exports: [TimerShellComponent],\n})\nexport class TimerShellModule {}\n",
+      "children": [
+        {
+          "type": "providers",
+          "elements": []
+        },
+        {
+          "type": "declarations",
+          "elements": [
+            {
+              "name": "TimerShellComponent"
+            }
+          ]
+        },
+        {
+          "type": "imports",
+          "elements": [
+            {
+              "name": "TimerDisplayModule"
+            }
+          ]
+        },
+        {
+          "type": "exports",
+          "elements": [
+            {
+              "name": "TimerShellComponent"
+            }
+          ]
+        },
+        {
+          "type": "bootstrap",
+          "elements": []
         },
         {
           "type": "classes",
@@ -177,10 +441,50 @@
         "defaultValue": "{\n  production: false\n}"
       },
       {
+        "name": "LessThanTenMinutes",
+        "ctype": "miscellaneous",
+        "subtype": "variable",
+        "file": "src/app/timer/timer-display/timer-display.stories.ts",
+        "deprecated": false,
+        "deprecationMessage": "",
+        "type": "",
+        "defaultValue": "Template.bind({})"
+      },
+      {
+        "name": "LessThanTenSeconds",
+        "ctype": "miscellaneous",
+        "subtype": "variable",
+        "file": "src/app/timer/timer-display/timer-display.stories.ts",
+        "deprecated": false,
+        "deprecationMessage": "",
+        "type": "",
+        "defaultValue": "Template.bind({})"
+      },
+      {
         "name": "Primary",
         "ctype": "miscellaneous",
         "subtype": "variable",
-        "file": "src/app/app-shell/app-shell.stories.ts",
+        "file": "src/app/app.stories.ts",
+        "deprecated": false,
+        "deprecationMessage": "",
+        "type": "",
+        "defaultValue": "Template.bind({})"
+      },
+      {
+        "name": "Primary",
+        "ctype": "miscellaneous",
+        "subtype": "variable",
+        "file": "src/app/timer/timer-shell/timer-shell.stories.ts",
+        "deprecated": false,
+        "deprecationMessage": "",
+        "type": "",
+        "defaultValue": "Template.bind({})"
+      },
+      {
+        "name": "Primary",
+        "ctype": "miscellaneous",
+        "subtype": "variable",
+        "file": "src/app/timer/timer-display/timer-display.stories.ts",
         "deprecated": false,
         "deprecationMessage": "",
         "type": "",
@@ -199,11 +503,41 @@
         "name": "Template",
         "ctype": "miscellaneous",
         "subtype": "variable",
-        "file": "src/app/app-shell/app-shell.stories.ts",
+        "file": "src/app/app.stories.ts",
         "deprecated": false,
         "deprecationMessage": "",
-        "type": "Story<AppShellComponent>",
-        "defaultValue": "(args: AppShellComponent) => ({\n  props: args,\n})"
+        "type": "Story<AppComponent>",
+        "defaultValue": "(args: AppComponent) => ({\n  props: args,\n})"
+      },
+      {
+        "name": "Template",
+        "ctype": "miscellaneous",
+        "subtype": "variable",
+        "file": "src/app/timer/timer-shell/timer-shell.stories.ts",
+        "deprecated": false,
+        "deprecationMessage": "",
+        "type": "Story<TimerShellComponent>",
+        "defaultValue": "(args: TimerShellComponent) => ({\n  props: args,\n})"
+      },
+      {
+        "name": "Template",
+        "ctype": "miscellaneous",
+        "subtype": "variable",
+        "file": "src/app/timer/timer-display/timer-display.stories.ts",
+        "deprecated": false,
+        "deprecationMessage": "",
+        "type": "Story<TimerDisplayComponent>",
+        "defaultValue": "(args: TimerDisplayComponent) => ({\n  props: args,\n})"
+      },
+      {
+        "name": "Zero",
+        "ctype": "miscellaneous",
+        "subtype": "variable",
+        "file": "src/app/timer/timer-display/timer-display.stories.ts",
+        "deprecated": false,
+        "deprecationMessage": "",
+        "type": "",
+        "defaultValue": "Template.bind({})"
       }
     ],
     "functions": [],
@@ -255,12 +589,32 @@
           "defaultValue": "{\n  production: false\n}"
         }
       ],
-      "src/app/app-shell/app-shell.stories.ts": [
+      "src/app/timer/timer-display/timer-display.stories.ts": [
+        {
+          "name": "LessThanTenMinutes",
+          "ctype": "miscellaneous",
+          "subtype": "variable",
+          "file": "src/app/timer/timer-display/timer-display.stories.ts",
+          "deprecated": false,
+          "deprecationMessage": "",
+          "type": "",
+          "defaultValue": "Template.bind({})"
+        },
+        {
+          "name": "LessThanTenSeconds",
+          "ctype": "miscellaneous",
+          "subtype": "variable",
+          "file": "src/app/timer/timer-display/timer-display.stories.ts",
+          "deprecated": false,
+          "deprecationMessage": "",
+          "type": "",
+          "defaultValue": "Template.bind({})"
+        },
         {
           "name": "Primary",
           "ctype": "miscellaneous",
           "subtype": "variable",
-          "file": "src/app/app-shell/app-shell.stories.ts",
+          "file": "src/app/timer/timer-display/timer-display.stories.ts",
           "deprecated": false,
           "deprecationMessage": "",
           "type": "",
@@ -270,11 +624,65 @@
           "name": "Template",
           "ctype": "miscellaneous",
           "subtype": "variable",
-          "file": "src/app/app-shell/app-shell.stories.ts",
+          "file": "src/app/timer/timer-display/timer-display.stories.ts",
           "deprecated": false,
           "deprecationMessage": "",
-          "type": "Story<AppShellComponent>",
-          "defaultValue": "(args: AppShellComponent) => ({\n  props: args,\n})"
+          "type": "Story<TimerDisplayComponent>",
+          "defaultValue": "(args: TimerDisplayComponent) => ({\n  props: args,\n})"
+        },
+        {
+          "name": "Zero",
+          "ctype": "miscellaneous",
+          "subtype": "variable",
+          "file": "src/app/timer/timer-display/timer-display.stories.ts",
+          "deprecated": false,
+          "deprecationMessage": "",
+          "type": "",
+          "defaultValue": "Template.bind({})"
+        }
+      ],
+      "src/app/app.stories.ts": [
+        {
+          "name": "Primary",
+          "ctype": "miscellaneous",
+          "subtype": "variable",
+          "file": "src/app/app.stories.ts",
+          "deprecated": false,
+          "deprecationMessage": "",
+          "type": "",
+          "defaultValue": "Template.bind({})"
+        },
+        {
+          "name": "Template",
+          "ctype": "miscellaneous",
+          "subtype": "variable",
+          "file": "src/app/app.stories.ts",
+          "deprecated": false,
+          "deprecationMessage": "",
+          "type": "Story<AppComponent>",
+          "defaultValue": "(args: AppComponent) => ({\n  props: args,\n})"
+        }
+      ],
+      "src/app/timer/timer-shell/timer-shell.stories.ts": [
+        {
+          "name": "Primary",
+          "ctype": "miscellaneous",
+          "subtype": "variable",
+          "file": "src/app/timer/timer-shell/timer-shell.stories.ts",
+          "deprecated": false,
+          "deprecationMessage": "",
+          "type": "",
+          "defaultValue": "Template.bind({})"
+        },
+        {
+          "name": "Template",
+          "ctype": "miscellaneous",
+          "subtype": "variable",
+          "file": "src/app/timer/timer-shell/timer-shell.stories.ts",
+          "deprecated": false,
+          "deprecationMessage": "",
+          "type": "Story<TimerShellComponent>",
+          "defaultValue": "(args: TimerShellComponent) => ({\n  props: args,\n})"
         }
       ]
     },
@@ -288,16 +696,16 @@
     "status": "low",
     "files": [
       {
-        "filePath": "src/app/app-shell/app-shell.component.ts",
+        "filePath": "src/app/app.component.ts",
         "type": "component",
         "linktype": "component",
-        "name": "AppShellComponent",
+        "name": "AppComponent",
         "coveragePercent": 0,
         "coverageCount": "0/2",
         "status": "low"
       },
       {
-        "filePath": "src/app/app-shell/app-shell.stories.ts",
+        "filePath": "src/app/app.stories.ts",
         "type": "variable",
         "linktype": "miscellaneous",
         "linksubtype": "variable",
@@ -307,7 +715,7 @@
         "status": "low"
       },
       {
-        "filePath": "src/app/app-shell/app-shell.stories.ts",
+        "filePath": "src/app/app.stories.ts",
         "type": "variable",
         "linktype": "miscellaneous",
         "linksubtype": "variable",
@@ -317,12 +725,100 @@
         "status": "low"
       },
       {
-        "filePath": "src/app/app.component.ts",
+        "filePath": "src/app/timer/timer-display/convert-seconds-to-string.pipe.ts",
+        "type": "pipe",
+        "linktype": "pipe",
+        "name": "ConvertSecondsToStringPipe",
+        "coveragePercent": 0,
+        "coverageCount": "0/1",
+        "status": "low"
+      },
+      {
+        "filePath": "src/app/timer/timer-display/timer-display.component.ts",
         "type": "component",
         "linktype": "component",
-        "name": "AppComponent",
+        "name": "TimerDisplayComponent",
         "coveragePercent": 0,
         "coverageCount": "0/2",
+        "status": "low"
+      },
+      {
+        "filePath": "src/app/timer/timer-display/timer-display.stories.ts",
+        "type": "variable",
+        "linktype": "miscellaneous",
+        "linksubtype": "variable",
+        "name": "LessThanTenMinutes",
+        "coveragePercent": 0,
+        "coverageCount": "0/1",
+        "status": "low"
+      },
+      {
+        "filePath": "src/app/timer/timer-display/timer-display.stories.ts",
+        "type": "variable",
+        "linktype": "miscellaneous",
+        "linksubtype": "variable",
+        "name": "LessThanTenSeconds",
+        "coveragePercent": 0,
+        "coverageCount": "0/1",
+        "status": "low"
+      },
+      {
+        "filePath": "src/app/timer/timer-display/timer-display.stories.ts",
+        "type": "variable",
+        "linktype": "miscellaneous",
+        "linksubtype": "variable",
+        "name": "Primary",
+        "coveragePercent": 0,
+        "coverageCount": "0/1",
+        "status": "low"
+      },
+      {
+        "filePath": "src/app/timer/timer-display/timer-display.stories.ts",
+        "type": "variable",
+        "linktype": "miscellaneous",
+        "linksubtype": "variable",
+        "name": "Template",
+        "coveragePercent": 0,
+        "coverageCount": "0/1",
+        "status": "low"
+      },
+      {
+        "filePath": "src/app/timer/timer-display/timer-display.stories.ts",
+        "type": "variable",
+        "linktype": "miscellaneous",
+        "linksubtype": "variable",
+        "name": "Zero",
+        "coveragePercent": 0,
+        "coverageCount": "0/1",
+        "status": "low"
+      },
+      {
+        "filePath": "src/app/timer/timer-shell/timer-shell.component.ts",
+        "type": "component",
+        "linktype": "component",
+        "name": "TimerShellComponent",
+        "coveragePercent": 0,
+        "coverageCount": "0/3",
+        "status": "low"
+      },
+      {
+        "filePath": "src/app/timer/timer-shell/timer-shell.stories.ts",
+        "type": "variable",
+        "linktype": "miscellaneous",
+        "linksubtype": "variable",
+        "name": "Primary",
+        "coveragePercent": 0,
+        "coverageCount": "0/1",
+        "status": "low"
+      },
+      {
+        "filePath": "src/app/timer/timer-shell/timer-shell.stories.ts",
+        "type": "variable",
+        "linktype": "miscellaneous",
+        "linksubtype": "variable",
+        "name": "Template",
+        "coveragePercent": 0,
+        "coverageCount": "0/1",
         "status": "low"
       },
       {

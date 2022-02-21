@@ -9,7 +9,13 @@ import { Component, Input } from '@angular/core'
       </p>
     </div>
   `,
-  styleUrls: ['./timer-display.component.scss'],
+  styles: [
+    `
+      :host {
+        display: block;
+      }
+    `,
+  ],
 })
 export class TimerDisplayComponent {
   @Input()
