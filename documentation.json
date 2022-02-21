@@ -98,13 +98,13 @@
   "modules": [
     {
       "name": "AppModule",
-      "id": "module-AppModule-c5ab7470eb9ba6a59e844f1d936d65bd57d4919a25dfbbd8c0b2be74d4b19892669a32cdf07a4d9f26d9df560f4e6de6017a6c7a4bf76b7f443de029c9146d33",
+      "id": "module-AppModule-999ed35fb11f1d8baa6bc3370f7ad30dcf2b807312335533f0dd3b45f26dcfcd3320a68efa4cc0bc1b86323494aad8a6d3153388216d19c5c55edae647686bff",
       "description": "",
       "deprecationMessage": "",
       "deprecated": false,
       "file": "src/app/app.module.ts",
       "methods": [],
-      "sourceCode": "import { NgModule } from '@angular/core'\nimport { BrowserModule } from '@angular/platform-browser'\n\nimport { AppComponent } from './app.component'\nimport { FontAwesomeModule } from '@fortawesome/angular-fontawesome'\nimport { AppShellComponent } from './app-shell/app-shell.component'\n\n@NgModule({\n  declarations: [AppComponent, AppShellComponent],\n  imports: [BrowserModule, FontAwesomeModule],\n  providers: [],\n  bootstrap: [AppComponent],\n})\nexport class AppModule {}\n",
+      "sourceCode": "import { NgModule } from '@angular/core'\nimport { BrowserModule } from '@angular/platform-browser'\n\nimport { AppComponent } from './app.component'\nimport { FontAwesomeModule } from '@fortawesome/angular-fontawesome'\nimport { AppShellComponent } from './app-shell'\n\n@NgModule({\n  declarations: [AppComponent, AppShellComponent],\n  imports: [BrowserModule, FontAwesomeModule],\n  providers: [],\n  bootstrap: [AppComponent],\n})\nexport class AppModule {}\n",
       "children": [
         {
           "type": "providers",
@@ -164,7 +164,7 @@
         "deprecated": false,
         "deprecationMessage": "",
         "type": "object",
-        "defaultValue": "{\n  production: true\n}"
+        "defaultValue": "{\n  production: true,\n}"
       },
       {
         "name": "environment",
@@ -240,7 +240,7 @@
           "deprecated": false,
           "deprecationMessage": "",
           "type": "object",
-          "defaultValue": "{\n  production: true\n}"
+          "defaultValue": "{\n  production: true,\n}"
         }
       ],
       "src/environments/environment.ts": [

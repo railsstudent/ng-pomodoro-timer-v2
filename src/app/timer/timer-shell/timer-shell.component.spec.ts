@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 
-import { AppShellComponent } from './app-shell.component'
+import { TimerShellComponent } from './timer-shell.component'
 
-describe('AppShellComponent', () => {
-  let component: AppShellComponent
-  let fixture: ComponentFixture<AppShellComponent>
+describe('TimerShellComponent', () => {
+  let component: TimerShellComponent
+  let fixture: ComponentFixture<TimerShellComponent>
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [AppShellComponent],
+      declarations: [TimerShellComponent],
     }).compileComponents()
   })
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AppShellComponent)
+    fixture = TestBed.createComponent(TimerShellComponent)
     component = fixture.componentInstance
     fixture.detectChanges()
   })

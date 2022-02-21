@@ -3,11 +3,11 @@ import { BrowserModule } from '@angular/platform-browser'
 
 import { AppComponent } from './app.component'
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
-import { AppShellComponent } from './app-shell'
+import { TimerModule } from './timer'
 
 @NgModule({
-  declarations: [AppComponent, AppShellComponent],
-  imports: [BrowserModule, FontAwesomeModule],
+  declarations: [AppComponent],
+  imports: [BrowserModule, FontAwesomeModule, TimerModule],
   providers: [],
   bootstrap: [AppComponent],
 })
