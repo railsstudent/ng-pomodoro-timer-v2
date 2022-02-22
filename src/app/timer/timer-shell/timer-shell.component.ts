@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core'
+import { Component } from '@angular/core'
 
 @Component({
   selector: 'app-timer-shell',
   template: `
     <div class="h-full bg-sky-400">
-      <p>app-shell works!</p>
+      <app-timer-display [totalSeconds]="totalSeconds"></app-timer-display>
     </div>
   `,
   styles: [
@@ -16,8 +16,6 @@ import { Component, OnInit } from '@angular/core'
     `,
   ],
 })
-export class TimerShellComponent implements OnInit {
-  ngOnInit(): void {
-    console.log('ddd')
-  }
+export class TimerShellComponent {
+  totalSeconds = 900
 }
