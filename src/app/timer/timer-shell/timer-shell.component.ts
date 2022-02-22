@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core'
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core'
 
 @Component({
   selector: 'app-timer-shell',
@@ -15,6 +15,7 @@ import { Component, Input } from '@angular/core'
       }
     `,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TimerShellComponent {
   @Input()
