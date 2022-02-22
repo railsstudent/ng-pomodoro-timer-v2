@@ -1,13 +1,14 @@
-import { AppComponent } from './app.component'
 import { Meta, moduleMetadata, Story } from '@storybook/angular'
-import { AppModule } from './app.module'
+import { AppComponent } from './app.component'
+import { TimerModule } from './timer'
 
 export default {
   title: 'App Component',
   component: AppComponent,
   decorators: [
     moduleMetadata({
-      imports: [AppModule],
+      declarations: [AppComponent],
+      imports: [TimerModule],
     }),
   ],
 } as Meta
