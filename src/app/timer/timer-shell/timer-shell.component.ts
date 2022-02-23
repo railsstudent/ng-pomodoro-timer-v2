@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core'
-import { STATUS } from '../enums'
 
 @Component({
   selector: 'app-timer-shell',
@@ -25,5 +24,5 @@ export class TimerShellComponent {
   @Input()
   totalSeconds = 900
 
-  status = STATUS.STOP.toString()
+  status = 'STOP'
 }

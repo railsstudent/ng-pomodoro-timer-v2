@@ -19,15 +19,15 @@ const Template: Story<TimerMessageComponent> = (args: TimerMessageComponent) => 
 
 export const Stop = Template.bind({})
 Stop.args = {
-  status: STATUS.STOP.toString(),
+  status: STATUS.STOP,
 }
 
 export const Pause = Template.bind({})
 Pause.args = {
-  status: STATUS.PAUSE.toString(),
+  status: STATUS.PAUSE,
 }
 
 export const Running = Template.bind({})
 Running.args = {
-  status: STATUS.RUNNING.toString(),
+  status: STATUS.RUNNING,
 }

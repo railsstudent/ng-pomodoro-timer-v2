@@ -4,9 +4,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core'
   selector: 'app-timer-message',
   template: `
     <div class="my-4 p-3">
-      <p class="text-6xl text-pink-800 text-center">
-        {{ status | convertStatusToMessage }}
-      </p>
+      <p class="text-6xl text-pink-800 text-center">{{ status }}, {{ status | convertStatusToMessage }}</p>
     </div>
   `,
   styles: [
