@@ -1,0 +1,13 @@
+:host {
+  display: block;
+}
+
+.spacer {
+  @apply basis-1/3 grow shrink;
+}
+
+.button {
+  @apply bg-black;
+  @apply p-2;
+  @apply text-white;
+}

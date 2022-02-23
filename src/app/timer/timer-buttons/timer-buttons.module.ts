@@ -1,8 +1,11 @@
 import { NgModule } from '@angular/core'
 import { CommonModule } from '@angular/common'
+import { TimerButtonsComponent } from './timer-buttons.component'
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 
 @NgModule({
-  declarations: [],
-  imports: [CommonModule],
+  declarations: [TimerButtonsComponent],
+  imports: [CommonModule, FontAwesomeModule],
+  exports: [TimerButtonsComponent],
 })
 export class TimerButtonsModule {}
