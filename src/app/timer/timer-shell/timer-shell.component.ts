@@ -5,8 +5,9 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core'
   template: `
     <div class="h-full bg-sky-400 flex flex-col justify-center">
       <div>
-        <app-timer-message [status]="status"></app-timer-message>
-        <app-timer-display [totalSeconds]="totalSeconds"></app-timer-display>
+        <app-timer-message class="mb-2" [status]="status"></app-timer-message>
+        <app-timer-display class="mb-4" [totalSeconds]="totalSeconds"></app-timer-display>
+        <app-timer-buttons></app-timer-buttons>
       </div>
     </div>
   `,
