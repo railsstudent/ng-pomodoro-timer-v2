@@ -4,7 +4,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core'
   selector: 'app-timer-display',
   template: `
     <div class="p-4">
-      <p class="text-[12rem] leading-[0.75] text-pink-800 text-center">
+      <p class="text-[10rem] leading-[4rem] text-pink-800 text-center">
         {{ totalSeconds | convertSecondsToString }}
       </p>
     </div>
