@@ -1,10 +1,16 @@
 import { TimerMessageComponent } from './timer-message.component'
-import { Meta, Story } from '@storybook/angular'
+import { Meta, moduleMetadata, Story } from '@storybook/angular'
 import { STATUS } from '../enums'
+import { ConvertStatusToMessagePipe } from './convert-status-to-message.pipe'
 
 export default {
   title: 'Timer Message',
   component: TimerMessageComponent,
+  decorators: [
+    moduleMetadata({
+      declarations: [ConvertStatusToMessagePipe],
+    }),
+  ],
 } as Meta
 
 const Template: Story<TimerMessageComponent> = (args: TimerMessageComponent) => ({
