@@ -167,7 +167,7 @@
     },
     {
       "name": "TimerButtonsComponent",
-      "id": "component-TimerButtonsComponent-863bc4f51f2bfe2c9e0f34544069bf616a0ab42a4a6e17f75c15bb1c5bc3bfbdf56488362ee7e932251e21fca72e080f4f92c8c66d8db95735ad323bc0c8056b",
+      "id": "component-TimerButtonsComponent-aa335bd2f4b35efbfde8a0c02e6c167b3833e366e4f86ab660b15b79139a3622a441f661ecdb7bebdc0948bc67202daf3cc27c0b602ee1323d6225a7f1627324",
       "file": "src/app/timer/timer-buttons/timer-buttons.component.ts",
       "changeDetection": "ChangeDetectionStrategy.OnPush",
       "encapsulation": [],
@@ -178,13 +178,119 @@
       "selector": "app-timer-buttons",
       "styleUrls": ["./timer-buttons.component.scss"],
       "styles": [],
-      "template": "<div class=\"flex p-4\">\n  <span class=\"spacer\"></span>\n  <div class=\"spacer\">\n    <button class=\"start button\" aria-label=\"start timer\">Start</button>\n    <button class=\"pause button\" aria-label=\"pause timer\">Pause</button>\n    <button class=\"stop button\" aria-label=\"stop timer\">Stop</button>\n  </div>\n  <span class=\"spacer\"></span>\n</div>\n",
+      "template": "<div class=\"flex p-4\">\n  <span class=\"spacer\"></span>\n  <div class=\"spacer flex justify-evenly\">\n    <button class=\"start button\" aria-label=\"start timer\" #start>\n      <fa-icon [icon]=\"faPlay\"></fa-icon>\n    </button>\n    <button class=\"pause button\" aria-label=\"pause timer\" #pause>\n      <fa-icon [icon]=\"faPause\"></fa-icon>\n    </button>\n    <button class=\"stop button\" aria-label=\"stop timer\" #stop>\n      <fa-icon [icon]=\"faStop\"></fa-icon>\n    </button>\n  </div>\n  <span class=\"spacer\"></span>\n</div>\n",
       "templateUrl": [],
       "viewProviders": [],
       "inputsClass": [],
       "outputsClass": [],
-      "propertiesClass": [],
-      "methodsClass": [],
+      "propertiesClass": [
+        {
+          "name": "btnPause",
+          "deprecated": false,
+          "deprecationMessage": "",
+          "type": "ElementRef",
+          "optional": false,
+          "description": "",
+          "line": 40,
+          "decorators": [
+            {
+              "name": "ViewChild",
+              "stringifiedArguments": "'pause', {read: ElementRef, static: true}"
+            }
+          ]
+        },
+        {
+          "name": "btnStart",
+          "deprecated": false,
+          "deprecationMessage": "",
+          "type": "ElementRef",
+          "optional": false,
+          "description": "",
+          "line": 34,
+          "decorators": [
+            {
+              "name": "ViewChild",
+              "stringifiedArguments": "'start', {read: ElementRef, static: true}"
+            }
+          ]
+        },
+        {
+          "name": "btnStop",
+          "deprecated": false,
+          "deprecationMessage": "",
+          "type": "ElementRef",
+          "optional": false,
+          "description": "",
+          "line": 37,
+          "decorators": [
+            {
+              "name": "ViewChild",
+              "stringifiedArguments": "'stop', {read: ElementRef, static: true}"
+            }
+          ]
+        },
+        {
+          "name": "faPause",
+          "defaultValue": "faPause",
+          "deprecated": false,
+          "deprecationMessage": "",
+          "type": "",
+          "optional": false,
+          "description": "",
+          "line": 31
+        },
+        {
+          "name": "faPlay",
+          "defaultValue": "faPlay",
+          "deprecated": false,
+          "deprecationMessage": "",
+          "type": "",
+          "optional": false,
+          "description": "",
+          "line": 29
+        },
+        {
+          "name": "faStop",
+          "defaultValue": "faStop",
+          "deprecated": false,
+          "deprecationMessage": "",
+          "type": "",
+          "optional": false,
+          "description": "",
+          "line": 30
+        },
+        {
+          "name": "subscription",
+          "deprecated": false,
+          "deprecationMessage": "",
+          "type": "Subscription",
+          "optional": false,
+          "description": "",
+          "line": 42
+        }
+      ],
+      "methodsClass": [
+        {
+          "name": "ngOnDestroy",
+          "args": [],
+          "optional": false,
+          "returnType": "void",
+          "typeParameters": [],
+          "line": 52,
+          "deprecated": false,
+          "deprecationMessage": ""
+        },
+        {
+          "name": "ngOnInit",
+          "args": [],
+          "optional": false,
+          "returnType": "void",
+          "typeParameters": [],
+          "line": 44,
+          "deprecated": false,
+          "deprecationMessage": ""
+        }
+      ],
       "deprecated": false,
       "deprecationMessage": "",
       "hostBindings": [],
@@ -192,19 +298,20 @@
       "description": "",
       "rawdescription": "\n",
       "type": "component",
-      "sourceCode": "import { Component, ChangeDetectionStrategy } from '@angular/core'\n\n@Component({\n  selector: 'app-timer-buttons',\n  template: `\n    <div class=\"flex p-4\">\n      <span class=\"spacer\"></span>\n      <div class=\"spacer\">\n        <button class=\"start button\" aria-label=\"start timer\">Start</button>\n        <button class=\"pause button\" aria-label=\"pause timer\">Pause</button>\n        <button class=\"stop button\" aria-label=\"stop timer\">Stop</button>\n      </div>\n      <span class=\"spacer\"></span>\n    </div>\n  `,\n  styleUrls: ['./timer-buttons.component.scss'],\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class TimerButtonsComponent {}\n",
+      "sourceCode": "import { Component, ChangeDetectionStrategy, ViewChild, OnInit, ElementRef, OnDestroy } from '@angular/core'\nimport { faPlay, faStop, faPause } from '@fortawesome/free-solid-svg-icons'\nimport { fromEvent, mapTo, merge, startWith, Subscription } from 'rxjs'\nimport { STATUS } from '../enums'\n\n@Component({\n  selector: 'app-timer-buttons',\n  template: `\n    <div class=\"flex p-4\">\n      <span class=\"spacer\"></span>\n      <div class=\"spacer flex justify-evenly\">\n        <button class=\"start button\" aria-label=\"start timer\" #start>\n          <fa-icon [icon]=\"faPlay\"></fa-icon>\n        </button>\n        <button class=\"pause button\" aria-label=\"pause timer\" #pause>\n          <fa-icon [icon]=\"faPause\"></fa-icon>\n        </button>\n        <button class=\"stop button\" aria-label=\"stop timer\" #stop>\n          <fa-icon [icon]=\"faStop\"></fa-icon>\n        </button>\n      </div>\n      <span class=\"spacer\"></span>\n    </div>\n  `,\n  styleUrls: ['./timer-buttons.component.scss'],\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class TimerButtonsComponent implements OnInit, OnDestroy {\n  faPlay = faPlay\n  faStop = faStop\n  faPause = faPause\n\n  @ViewChild('start', { read: ElementRef, static: true })\n  btnStart: ElementRef\n\n  @ViewChild('stop', { read: ElementRef, static: true })\n  btnStop: ElementRef\n\n  @ViewChild('pause', { read: ElementRef, static: true })\n  btnPause: ElementRef\n\n  subscription: Subscription\n\n  ngOnInit(): void {\n    const btnStartClicked$ = fromEvent(this.btnStart.nativeElement, 'click').pipe(mapTo(STATUS.RUNNING))\n    const btnStopClicked$ = fromEvent(this.btnStop.nativeElement, 'click').pipe(mapTo(STATUS.STOP))\n    const btnPausetClicked$ = fromEvent(this.btnPause.nativeElement, 'click').pipe(mapTo(STATUS.PAUSE))\n\n    this.subscription = merge(btnStartClicked$, btnStopClicked$, btnPausetClicked$).pipe(startWith(STATUS.STOP)).subscribe(console.log)\n  }\n\n  ngOnDestroy(): void {\n    if (this.subscription) {\n      this.subscription.unsubscribe()\n    }\n  }\n}\n",
       "assetsDirs": [],
       "styleUrlsData": [
         {
-          "data": ":host {\n  display: block;\n}\n\n.spacer {\n  @apply basis-1/3 grow shrink;\n}\n\n.button {\n  @apply bg-black;\n  @apply p-2;\n  @apply text-white;\n}\n",
+          "data": ":host {\n  display: block;\n}\n\n.spacer {\n  @apply basis-1/3 grow shrink;\n}\n\n.button {\n  @apply bg-black;\n  @apply p-4;\n  @apply text-white;\n  @apply rounded-lg;\n  width: 45px;\n  height: 45px;\n  @apply flex justify-center items-center;\n}\n",
           "styleUrl": "./timer-buttons.component.scss"
         }
       ],
-      "stylesData": ""
+      "stylesData": "",
+      "implements": ["OnInit", "OnDestroy"]
     },
     {
       "name": "TimerDisplayComponent",
-      "id": "component-TimerDisplayComponent-e310c3a04fa99da5888791351f3fbb238e3b603c8a71093ffdaae7295e229e59d9bd62d9fe387f6af582df1bbfb46019e9eef5e2cfa57aeb58f65c384421c929",
+      "id": "component-TimerDisplayComponent-d53876ad8f2437054261059c2b8c7b1d4bbd56576f42e3725ae4f0fae281356dc475c667bd17bd969ece4604c9e0f378f7a59ded7c1bec4611aa2be49bcfe513",
       "file": "src/app/timer/timer-display/timer-display.component.ts",
       "changeDetection": "ChangeDetectionStrategy.OnPush",
       "encapsulation": [],
@@ -215,7 +322,7 @@
       "selector": "app-timer-display",
       "styleUrls": [],
       "styles": ["\n      :host {\n        display: block;\n      }\n    "],
-      "template": "<div class=\"p-4\">\n  <p class=\"text-[12rem] leading-[0.75] text-pink-800 text-center\">\n    {{ totalSeconds | convertSecondsToString }}\n  </p>\n</div>\n",
+      "template": "<div class=\"p-4\">\n  <p class=\"text-[10rem] leading-[4rem] text-pink-800 text-center\">\n    {{ totalSeconds | convertSecondsToString }}\n  </p>\n</div>\n",
       "templateUrl": [],
       "viewProviders": [],
       "inputsClass": [
@@ -238,14 +345,14 @@
       "description": "",
       "rawdescription": "\n",
       "type": "component",
-      "sourceCode": "import { ChangeDetectionStrategy, Component, Input } from '@angular/core'\n\n@Component({\n  selector: 'app-timer-display',\n  template: `\n    <div class=\"p-4\">\n      <p class=\"text-[12rem] leading-[0.75] text-pink-800 text-center\">\n        {{ totalSeconds | convertSecondsToString }}\n      </p>\n    </div>\n  `,\n  styles: [\n    `\n      :host {\n        display: block;\n      }\n    `,\n  ],\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class TimerDisplayComponent {\n  @Input()\n  totalSeconds: number\n}\n",
+      "sourceCode": "import { ChangeDetectionStrategy, Component, Input } from '@angular/core'\n\n@Component({\n  selector: 'app-timer-display',\n  template: `\n    <div class=\"p-4\">\n      <p class=\"text-[10rem] leading-[4rem] text-pink-800 text-center\">\n        {{ totalSeconds | convertSecondsToString }}\n      </p>\n    </div>\n  `,\n  styles: [\n    `\n      :host {\n        display: block;\n      }\n    `,\n  ],\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class TimerDisplayComponent {\n  @Input()\n  totalSeconds: number\n}\n",
       "assetsDirs": [],
       "styleUrlsData": "",
       "stylesData": "\n      :host {\n        display: block;\n      }\n    \n"
     },
     {
       "name": "TimerMessageComponent",
-      "id": "component-TimerMessageComponent-8a8b460eb368cce0a3b9fa83205e5b314f0b507e887ad03b06557573cd558f9937f652aeb0a23636300da215d2d10882ee3290d1743059c574300509857d0e8c",
+      "id": "component-TimerMessageComponent-a666b340d51a17f9ac4a73ba653d37184ab242650f04ea41ae706d09dfe58dee6ba7ce46be899a54cb68def2f73feb7dca6f27a7144e711652ef4a25a9e779ae",
       "file": "src/app/timer/timer-message/timer-message.component.ts",
       "changeDetection": "ChangeDetectionStrategy.OnPush",
       "encapsulation": [],
@@ -256,7 +363,7 @@
       "selector": "app-timer-message",
       "styleUrls": [],
       "styles": ["\n      :host {\n        display: block;\n      }\n    "],
-      "template": "<div class=\"my-4 p-3\">\n  <p class=\"text-6xl text-pink-800 text-center\">{{ status }}, {{ status | convertStatusToMessage }}</p>\n</div>\n",
+      "template": "<div class=\"my-4 p-3\">\n  <p class=\"text-7xl text-pink-800 text-center\">{{ status | convertStatusToMessage }}</p>\n</div>\n",
       "templateUrl": [],
       "viewProviders": [],
       "inputsClass": [
@@ -279,14 +386,14 @@
       "description": "",
       "rawdescription": "\n",
       "type": "component",
-      "sourceCode": "import { ChangeDetectionStrategy, Component, Input } from '@angular/core'\n\n@Component({\n  selector: 'app-timer-message',\n  template: `\n    <div class=\"my-4 p-3\">\n      <p class=\"text-6xl text-pink-800 text-center\">{{ status }}, {{ status | convertStatusToMessage }}</p>\n    </div>\n  `,\n  styles: [\n    `\n      :host {\n        display: block;\n      }\n    `,\n  ],\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class TimerMessageComponent {\n  @Input()\n  status: string\n}\n",
+      "sourceCode": "import { ChangeDetectionStrategy, Component, Input } from '@angular/core'\n\n@Component({\n  selector: 'app-timer-message',\n  template: `\n    <div class=\"my-4 p-3\">\n      <p class=\"text-7xl text-pink-800 text-center\">{{ status | convertStatusToMessage }}</p>\n    </div>\n  `,\n  styles: [\n    `\n      :host {\n        display: block;\n      }\n    `,\n  ],\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class TimerMessageComponent {\n  @Input()\n  status: string\n}\n",
       "assetsDirs": [],
       "styleUrlsData": "",
       "stylesData": "\n      :host {\n        display: block;\n      }\n    \n"
     },
     {
       "name": "TimerShellComponent",
-      "id": "component-TimerShellComponent-27304f9612809e763ec109a817e4992a7c3275dfc218b44c93277ee64bce1d9455c8bed8c06a874271889626c0593d54e2c2ca302c30353f90913f7ad77072db",
+      "id": "component-TimerShellComponent-b958fe4e965c97f357f639b3944219e31a47859b1878c1411a1f82678b24ebeb9d154f2997b08be59e127d809eb7ff419fc0cdf65288973c8e1a08d2cc9d1dd6",
       "file": "src/app/timer/timer-shell/timer-shell.component.ts",
       "changeDetection": "ChangeDetectionStrategy.OnPush",
       "encapsulation": [],
@@ -299,7 +406,7 @@
       "styles": [
         "\n      :host {\n        display: block;\n        height: 100vh;\n      }\n    "
       ],
-      "template": "<div class=\"h-full bg-sky-400 flex flex-col justify-center\">\n  <div>\n    <app-timer-message [status]=\"status\"></app-timer-message>\n    <app-timer-display [totalSeconds]=\"totalSeconds\"></app-timer-display>\n  </div>\n</div>\n",
+      "template": "<div class=\"h-full bg-sky-400 flex flex-col justify-center\">\n  <div>\n    <app-timer-message class=\"mb-6\" [status]=\"status\"></app-timer-message>\n    <app-timer-display class=\"mb-8\" [totalSeconds]=\"totalSeconds\"></app-timer-display>\n    <app-timer-buttons></app-timer-buttons>\n  </div>\n</div>\n",
       "templateUrl": [],
       "viewProviders": [],
       "inputsClass": [
@@ -308,7 +415,7 @@
           "defaultValue": "900",
           "deprecated": false,
           "deprecationMessage": "",
-          "line": 25,
+          "line": 26,
           "type": "number",
           "decorators": []
         }
@@ -323,7 +430,7 @@
           "type": "string",
           "optional": false,
           "description": "",
-          "line": 27
+          "line": 28
         }
       ],
       "methodsClass": [],
@@ -334,7 +441,7 @@
       "description": "",
       "rawdescription": "\n",
       "type": "component",
-      "sourceCode": "import { ChangeDetectionStrategy, Component, Input } from '@angular/core'\n\n@Component({\n  selector: 'app-timer-shell',\n  template: `\n    <div class=\"h-full bg-sky-400 flex flex-col justify-center\">\n      <div>\n        <app-timer-message [status]=\"status\"></app-timer-message>\n        <app-timer-display [totalSeconds]=\"totalSeconds\"></app-timer-display>\n      </div>\n    </div>\n  `,\n  styles: [\n    `\n      :host {\n        display: block;\n        height: 100vh;\n      }\n    `,\n  ],\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class TimerShellComponent {\n  @Input()\n  totalSeconds = 900\n\n  status = 'STOP'\n}\n",
+      "sourceCode": "import { ChangeDetectionStrategy, Component, Input } from '@angular/core'\n\n@Component({\n  selector: 'app-timer-shell',\n  template: `\n    <div class=\"h-full bg-sky-400 flex flex-col justify-center\">\n      <div>\n        <app-timer-message class=\"mb-6\" [status]=\"status\"></app-timer-message>\n        <app-timer-display class=\"mb-8\" [totalSeconds]=\"totalSeconds\"></app-timer-display>\n        <app-timer-buttons></app-timer-buttons>\n      </div>\n    </div>\n  `,\n  styles: [\n    `\n      :host {\n        display: block;\n        height: 100vh;\n      }\n    `,\n  ],\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class TimerShellComponent {\n  @Input()\n  totalSeconds = 900\n\n  status = 'STOP'\n}\n",
       "assetsDirs": [],
       "styleUrlsData": "",
       "stylesData": "\n      :host {\n        display: block;\n        height: 100vh;\n      }\n    \n"
@@ -343,13 +450,13 @@
   "modules": [
     {
       "name": "AppModule",
-      "id": "module-AppModule-394d28833d02efa6468b09e24f349f727ee5f0d4e017d330b661acc96ef041e5c46f4fc525d7aca4a021485de577144985908dc9546cf553c64c8185bfa5a8e0",
+      "id": "module-AppModule-7f4ed85f3ea0875013294504d170253086fceb4785d232fc8702336968c911b88c6ed4a18df66adcfdc749b86c5c8ea1718ad39e40fdddf3e86dfede3ace89d2",
       "description": "",
       "deprecationMessage": "",
       "deprecated": false,
       "file": "src/app/app.module.ts",
       "methods": [],
-      "sourceCode": "import { NgModule } from '@angular/core'\nimport { BrowserModule } from '@angular/platform-browser'\n\nimport { AppComponent } from './app.component'\nimport { FontAwesomeModule } from '@fortawesome/angular-fontawesome'\nimport { TimerModule } from './timer'\n\n@NgModule({\n  declarations: [AppComponent],\n  imports: [BrowserModule, FontAwesomeModule, TimerModule],\n  providers: [],\n  bootstrap: [AppComponent],\n})\nexport class AppModule {}\n",
+      "sourceCode": "import { NgModule } from '@angular/core'\nimport { BrowserModule } from '@angular/platform-browser'\n\nimport { AppComponent } from './app.component'\nimport { TimerModule } from './timer'\n\n@NgModule({\n  declarations: [AppComponent],\n  imports: [BrowserModule, TimerModule],\n  providers: [],\n  bootstrap: [AppComponent],\n})\nexport class AppModule {}\n",
       "children": [
         {
           "type": "providers",
@@ -391,13 +498,13 @@
     },
     {
       "name": "TimerButtonsModule",
-      "id": "module-TimerButtonsModule-bc51306523625412425e6ed243049c6f3941db99978574da45591de77089436f0bf3fb5b9cbd7d4eb912133cf8a1c158376ccf939f7f6761fdff13de9ab8383b",
+      "id": "module-TimerButtonsModule-04a96dde0bb30dd43e84b587245399921a086ae6f008a1e945bb67b9a6c4d8bc777f2cb44a724c0a6e62ad81a2489dbf9bc00d053897fe1b0c8259ed358d1bcd",
       "description": "",
       "deprecationMessage": "",
       "deprecated": false,
       "file": "src/app/timer/timer-buttons/timer-buttons.module.ts",
       "methods": [],
-      "sourceCode": "import { NgModule } from '@angular/core'\nimport { CommonModule } from '@angular/common'\nimport { TimerButtonsComponent } from './timer-buttons.component'\n\n@NgModule({\n  declarations: [TimerButtonsComponent],\n  imports: [CommonModule],\n  exports: [TimerButtonsComponent],\n})\nexport class TimerButtonsModule {}\n",
+      "sourceCode": "import { NgModule } from '@angular/core'\nimport { CommonModule } from '@angular/common'\nimport { TimerButtonsComponent } from './timer-buttons.component'\nimport { FontAwesomeModule } from '@fortawesome/angular-fontawesome'\n\n@NgModule({\n  declarations: [TimerButtonsComponent],\n  imports: [CommonModule, FontAwesomeModule],\n  exports: [TimerButtonsComponent],\n})\nexport class TimerButtonsModule {}\n",
       "children": [
         {
           "type": "providers",
@@ -529,13 +636,13 @@
     },
     {
       "name": "TimerModule",
-      "id": "module-TimerModule-af0cd81c17c092043a0abcbe58eff7633f57c7b87b01168060d31628ab9e17817ff89b41df774d9fda164522b38c31a8cec56b3555b25c73e81575386912cc0c",
+      "id": "module-TimerModule-9f076fbe4278d641ea6e0dbe699cf64e3dee03585662af0b7488ea89e461355b15a8a99ed18558e863f7524d181be7bb03e2f7f381cb9473a905e921f5ecab85",
       "description": "",
       "deprecationMessage": "",
       "deprecated": false,
       "file": "src/app/timer/timer.module.ts",
       "methods": [],
-      "sourceCode": "import { NgModule } from '@angular/core'\nimport { CommonModule } from '@angular/common'\nimport { TimerShellModule } from './timer-shell'\nimport { TimerDisplayModule } from './timer-display'\nimport { TimerMessageModule } from './timer-message'\nimport { TimerButtonsModule } from './timer-buttons'\n\n@NgModule({\n  declarations: [],\n  imports: [CommonModule, TimerDisplayModule, TimerShellModule, TimerMessageModule, TimerButtonsModule],\n  exports: [TimerShellModule],\n})\nexport class TimerModule {}\n",
+      "sourceCode": "import { NgModule } from '@angular/core'\nimport { CommonModule } from '@angular/common'\nimport { TimerShellModule } from './timer-shell'\n\n@NgModule({\n  declarations: [],\n  imports: [CommonModule, TimerShellModule],\n  exports: [TimerShellModule],\n})\nexport class TimerModule {}\n",
       "children": [
         {
           "type": "providers",
@@ -548,15 +655,6 @@
         {
           "type": "imports",
           "elements": [
-            {
-              "name": "TimerButtonsModule"
-            },
-            {
-              "name": "TimerDisplayModule"
-            },
-            {
-              "name": "TimerMessageModule"
-            },
             {
               "name": "TimerShellModule"
             }
@@ -582,13 +680,13 @@
     },
     {
       "name": "TimerShellModule",
-      "id": "module-TimerShellModule-1c08592f9de5b5a27d7f6d785ce857bfe149e420ba5af3528161225d3f34fb55e2b85313ee5e9c69610232610322a9f32b786045b5b10cf86740fc2ffda59b26",
+      "id": "module-TimerShellModule-123803dc62407f4d5235dd4844ee483debcd4b578723de9119a804726eb397ef739288b27a4b8cb198ad26ab41605bdc83db4466ee7084424fa0e39d6b08f350",
       "description": "",
       "deprecationMessage": "",
       "deprecated": false,
       "file": "src/app/timer/timer-shell/timer-shell.module.ts",
       "methods": [],
-      "sourceCode": "import { NgModule } from '@angular/core'\nimport { CommonModule } from '@angular/common'\nimport { TimerShellComponent } from './timer-shell.component'\nimport { TimerDisplayModule } from '../timer-display'\nimport { TimerMessageModule } from '../timer-message'\n\n@NgModule({\n  declarations: [TimerShellComponent],\n  imports: [CommonModule, TimerDisplayModule, TimerMessageModule],\n  exports: [TimerShellComponent],\n})\nexport class TimerShellModule {}\n",
+      "sourceCode": "import { NgModule } from '@angular/core'\nimport { CommonModule } from '@angular/common'\nimport { TimerShellComponent } from './timer-shell.component'\nimport { TimerDisplayModule } from '../timer-display'\nimport { TimerMessageModule } from '../timer-message'\nimport { TimerButtonsModule } from '../timer-buttons'\n\n@NgModule({\n  declarations: [TimerShellComponent],\n  imports: [CommonModule, TimerDisplayModule, TimerMessageModule, TimerButtonsModule],\n  exports: [TimerShellComponent],\n})\nexport class TimerShellModule {}\n",
       "children": [
         {
           "type": "providers",
@@ -605,6 +703,9 @@
         {
           "type": "imports",
           "elements": [
+            {
+              "name": "TimerButtonsModule"
+            },
             {
               "name": "TimerDisplayModule"
             },
@@ -1180,7 +1281,7 @@
         "linktype": "component",
         "name": "TimerButtonsComponent",
         "coveragePercent": 0,
-        "coverageCount": "0/1",
+        "coverageCount": "0/10",
         "status": "low"
       },
       {

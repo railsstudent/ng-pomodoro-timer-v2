@@ -6,6 +6,6 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 @NgModule({
   declarations: [TimerButtonsComponent],
   imports: [CommonModule, FontAwesomeModule],
-  exports: [TimerButtonsComponent],
+  exports: [TimerButtonsComponent, FontAwesomeModule],
 })
 export class TimerButtonsModule {}
