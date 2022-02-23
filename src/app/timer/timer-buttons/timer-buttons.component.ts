@@ -6,7 +6,7 @@ import { faPlay, faStop, faPause } from '@fortawesome/free-solid-svg-icons'
   template: `
     <div class="flex p-4">
       <span class="spacer"></span>
-      <div class="spacer">
+      <div class="spacer flex justify-evenly">
         <button class="start button" aria-label="start timer">
           <fa-icon [icon]="faPlay"></fa-icon>
         </button>

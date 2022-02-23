@@ -8,6 +8,9 @@
 
 .button {
   @apply bg-black;
-  @apply p-2;
+  @apply p-4;
   @apply text-white;
+  @apply rounded-lg;
+  width: 60px;
+  height: 60px;
 }
