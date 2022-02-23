@@ -1,10 +1,10 @@
-import { Component, Input } from '@angular/core'
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core'
 
 @Component({
   selector: 'app-timer-display',
   template: `
     <div class="p-4">
-      <p class="text-[12rem] text-pink-800 text-center">
+      <p class="text-[12rem] leading-[0.75] text-pink-800 text-center">
         {{ totalSeconds | convertSecondsToString }}
       </p>
     </div>
@@ -16,6 +16,7 @@ import { Component, Input } from '@angular/core'
       }
     `,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TimerDisplayComponent {
   @Input()
