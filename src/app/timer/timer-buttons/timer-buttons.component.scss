@@ -11,6 +11,7 @@
   @apply p-4;
   @apply text-white;
   @apply rounded-lg;
-  width: 60px;
-  height: 60px;
+  width: 45px;
+  height: 45px;
+  @apply flex justify-center items-center;
 }
