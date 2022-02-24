@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, ViewChild, OnInit, ElementRef, OnDestroy, Output, EventEmitter, Input } from '@angular/core'
 import { faPlay, faStop, faPause } from '@fortawesome/free-solid-svg-icons'
-import { EMPTY, fromEvent, mapTo, merge, scan, startWith, Subscription, switchMap, takeWhile, tap, timer } from 'rxjs'
+import { EMPTY, fromEvent, mapTo, merge, repeat, scan, startWith, Subscription, switchMap, takeUntil, takeWhile, tap, timer } from 'rxjs'
 import { STATUS } from '../enums'
 
 @Component({
@@ -60,37 +60,31 @@ export class TimerButtonsComponent implements OnInit, OnDestroy {
     const btnStopClicked$ = fromEvent(this.btnStop.nativeElement, 'click').pipe(mapTo(STATUS.STOP))
     const btnPauseClicked$ = fromEvent(this.btnPause.nativeElement, 'click').pipe(mapTo(STATUS.PAUSE))
 
+    // https://stackoverflow.com/questions/69945765/rxjs-way-to-unsubscribe-after-button-click-but-with-opportunity-to-subscribe-aga
+    // https://stackoverflow.com/questions/69119769/how-to-add-a-stop-and-start-feature-for-an-rxjs-timer
     const subscription = merge(btnStartClicked$, btnPauseClicked$)
       .pipe(
         startWith(STATUS.STOP),
-        tap((status) => {
-          this.statusChange.emit(status)
-        }),
+        tap((status) => this.statusChange.emit(status)),
         switchMap((status) => {
           if (status === STATUS.RUNNING) {
-            return timer(0, 1000)
+            // start timer that emits number every 1 second and it stops when stop button is clicked
+            return timer(0, 1000).pipe(takeUntil(btnStopClicked$))
           }
           return EMPTY
         }),
-        scan((acc) => acc - 1, this.countDownSeconds),
+        mapTo(-1),
+        scan((acc, value) => acc + value, this.countDownSeconds + 1),
         takeWhile((value) => value >= 0),
+        repeat(),
       )
       .subscribe((value) => {
         this.value = value
         this.updateRemainingSeconds.emit(value)
       })
 
-    const stopSubscription = btnStopClicked$
-      .pipe(
-        tap(() => {
-          // unsubscribe timer
-          subscription.unsubscribe()
-        }),
-      )
-      .subscribe()
-
     this.subscriptions.push(subscription)
-    this.subscriptions.push(stopSubscription)
+    // this.subscriptions.push(stopSubscription)
   }
 
   ngOnDestroy(): void {
