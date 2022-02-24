@@ -1,13 +1,13 @@
-import { Component, ChangeDetectionStrategy, ViewChild, OnInit, ElementRef, OnDestroy } from '@angular/core'
+import { Component, ChangeDetectionStrategy, ViewChild, OnInit, ElementRef, OnDestroy, Output, EventEmitter, Input } from '@angular/core'
 import { faPlay, faStop, faPause } from '@fortawesome/free-solid-svg-icons'
-import { EMPTY, fromEvent, mapTo, merge, scan, startWith, Subscription, switchMap, tap, timer } from 'rxjs'
+import { EMPTY, fromEvent, mapTo, merge, scan, startWith, Subscription, switchMap, takeWhile, tap, timer } from 'rxjs'
 import { STATUS } from '../enums'
 
 @Component({
   selector: 'app-timer-buttons',
   template: `
     <div class="flex p-4">
-      <span class="spacer"></span>
+      <span class="spacer">{{ value }}</span>
       <div class="spacer flex justify-evenly">
         <button class="start button" aria-label="start timer" #start>
           <fa-icon [icon]="faPlay"></fa-icon>
@@ -39,31 +39,63 @@ export class TimerButtonsComponent implements OnInit, OnDestroy {
   @ViewChild('pause', { read: ElementRef, static: true })
   btnPause: ElementRef
 
-  subscription: Subscription
+  @Input()
+  countDownSeconds: number
+
+  @Output()
+  statusChange = new EventEmitter<string>()
+
+  @Output()
+  resetTimer = new EventEmitter<number>()
+
+  @Output()
+  updateRemainingSeconds = new EventEmitter<number>()
+
+  value: number
+
+  subscriptions: Subscription[] = []
 
   ngOnInit(): void {
     const btnStartClicked$ = fromEvent(this.btnStart.nativeElement, 'click').pipe(mapTo(STATUS.RUNNING))
     const btnStopClicked$ = fromEvent(this.btnStop.nativeElement, 'click').pipe(mapTo(STATUS.STOP))
     const btnPauseClicked$ = fromEvent(this.btnPause.nativeElement, 'click').pipe(mapTo(STATUS.PAUSE))
 
-    this.subscription = merge(btnStartClicked$, btnStopClicked$, btnPauseClicked$)
+    const subscription = merge(btnStartClicked$, btnPauseClicked$)
       .pipe(
         startWith(STATUS.STOP),
+        tap((status) => {
+          this.statusChange.emit(status)
+        }),
         switchMap((status) => {
           if (status === STATUS.RUNNING) {
             return timer(0, 1000)
           }
           return EMPTY
         }),
-        tap(console.log),
-        scan((acc) => acc + 1, 0),
+        scan((acc) => acc - 1, this.countDownSeconds),
+        takeWhile((value) => value >= 0),
       )
-      .subscribe(console.log)
+      .subscribe((value) => {
+        this.value = value
+        this.updateRemainingSeconds.emit(value)
+      })
+
+    const stopSubscription = btnStopClicked$
+      .pipe(
+        tap(() => {
+          // unsubscribe timer
+          subscription.unsubscribe()
+        }),
+      )
+      .subscribe()
+
+    this.subscriptions.push(subscription)
+    this.subscriptions.push(stopSubscription)
   }
 
   ngOnDestroy(): void {
-    if (this.subscription) {
-      this.subscription.unsubscribe()
+    for (const subscription of this.subscriptions) {
+      subscription.unsubscribe()
     }
   }
 }

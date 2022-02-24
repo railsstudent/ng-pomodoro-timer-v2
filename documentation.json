@@ -167,7 +167,7 @@
     },
     {
       "name": "TimerButtonsComponent",
-      "id": "component-TimerButtonsComponent-aa335bd2f4b35efbfde8a0c02e6c167b3833e366e4f86ab660b15b79139a3622a441f661ecdb7bebdc0948bc67202daf3cc27c0b602ee1323d6225a7f1627324",
+      "id": "component-TimerButtonsComponent-33780b03a9c34165907132e589f5f524b5de4a5516e8663af9c39c306e914062c8d9595460ade774058b722120e863d1d9c12cebaf5ba45806fc9dae5433f072",
       "file": "src/app/timer/timer-buttons/timer-buttons.component.ts",
       "changeDetection": "ChangeDetectionStrategy.OnPush",
       "encapsulation": [],
@@ -178,11 +178,45 @@
       "selector": "app-timer-buttons",
       "styleUrls": ["./timer-buttons.component.scss"],
       "styles": [],
-      "template": "<div class=\"flex p-4\">\n  <span class=\"spacer\"></span>\n  <div class=\"spacer flex justify-evenly\">\n    <button class=\"start button\" aria-label=\"start timer\" #start>\n      <fa-icon [icon]=\"faPlay\"></fa-icon>\n    </button>\n    <button class=\"pause button\" aria-label=\"pause timer\" #pause>\n      <fa-icon [icon]=\"faPause\"></fa-icon>\n    </button>\n    <button class=\"stop button\" aria-label=\"stop timer\" #stop>\n      <fa-icon [icon]=\"faStop\"></fa-icon>\n    </button>\n  </div>\n  <span class=\"spacer\"></span>\n</div>\n",
+      "template": "<div class=\"flex p-4\">\n  <span class=\"spacer\">{{value}}</span>\n  <div class=\"spacer flex justify-evenly\">\n    <button class=\"start button\" aria-label=\"start timer\" #start>\n      <fa-icon [icon]=\"faPlay\"></fa-icon>\n    </button>\n    <button class=\"pause button\" aria-label=\"pause timer\" #pause>\n      <fa-icon [icon]=\"faPause\"></fa-icon>\n    </button>\n    <button class=\"stop button\" aria-label=\"stop timer\" #stop>\n      <fa-icon [icon]=\"faStop\"></fa-icon>\n    </button>\n  </div>\n  <span class=\"spacer\"></span>\n</div>\n",
       "templateUrl": [],
       "viewProviders": [],
-      "inputsClass": [],
-      "outputsClass": [],
+      "inputsClass": [
+        {
+          "name": "countDownSeconds",
+          "deprecated": false,
+          "deprecationMessage": "",
+          "line": 44,
+          "type": "number",
+          "decorators": []
+        }
+      ],
+      "outputsClass": [
+        {
+          "name": "resetTimer",
+          "defaultValue": "new EventEmitter<number>()",
+          "deprecated": false,
+          "deprecationMessage": "",
+          "line": 50,
+          "type": "EventEmitter"
+        },
+        {
+          "name": "statusChange",
+          "defaultValue": "new EventEmitter<string>()",
+          "deprecated": false,
+          "deprecationMessage": "",
+          "line": 47,
+          "type": "EventEmitter"
+        },
+        {
+          "name": "updateRemainingSeconds",
+          "defaultValue": "new EventEmitter<number>()",
+          "deprecated": false,
+          "deprecationMessage": "",
+          "line": 53,
+          "type": "EventEmitter"
+        }
+      ],
       "propertiesClass": [
         {
           "name": "btnPause",
@@ -191,7 +225,7 @@
           "type": "ElementRef",
           "optional": false,
           "description": "",
-          "line": 40,
+          "line": 41,
           "decorators": [
             {
               "name": "ViewChild",
@@ -206,7 +240,7 @@
           "type": "ElementRef",
           "optional": false,
           "description": "",
-          "line": 34,
+          "line": 35,
           "decorators": [
             {
               "name": "ViewChild",
@@ -221,7 +255,7 @@
           "type": "ElementRef",
           "optional": false,
           "description": "",
-          "line": 37,
+          "line": 38,
           "decorators": [
             {
               "name": "ViewChild",
@@ -237,7 +271,7 @@
           "type": "",
           "optional": false,
           "description": "",
-          "line": 31
+          "line": 32
         },
         {
           "name": "faPlay",
@@ -247,7 +281,7 @@
           "type": "",
           "optional": false,
           "description": "",
-          "line": 29
+          "line": 30
         },
         {
           "name": "faStop",
@@ -257,7 +291,7 @@
           "type": "",
           "optional": false,
           "description": "",
-          "line": 30
+          "line": 31
         },
         {
           "name": "subscription",
@@ -266,7 +300,16 @@
           "type": "Subscription",
           "optional": false,
           "description": "",
-          "line": 42
+          "line": 57
+        },
+        {
+          "name": "value",
+          "deprecated": false,
+          "deprecationMessage": "",
+          "type": "number",
+          "optional": false,
+          "description": "",
+          "line": 55
         }
       ],
       "methodsClass": [
@@ -276,7 +319,7 @@
           "optional": false,
           "returnType": "void",
           "typeParameters": [],
-          "line": 52,
+          "line": 97,
           "deprecated": false,
           "deprecationMessage": ""
         },
@@ -286,7 +329,7 @@
           "optional": false,
           "returnType": "void",
           "typeParameters": [],
-          "line": 44,
+          "line": 63,
           "deprecated": false,
           "deprecationMessage": ""
         }
@@ -298,7 +341,7 @@
       "description": "",
       "rawdescription": "\n",
       "type": "component",
-      "sourceCode": "import { Component, ChangeDetectionStrategy, ViewChild, OnInit, ElementRef, OnDestroy } from '@angular/core'\nimport { faPlay, faStop, faPause } from '@fortawesome/free-solid-svg-icons'\nimport { fromEvent, mapTo, merge, startWith, Subscription } from 'rxjs'\nimport { STATUS } from '../enums'\n\n@Component({\n  selector: 'app-timer-buttons',\n  template: `\n    <div class=\"flex p-4\">\n      <span class=\"spacer\"></span>\n      <div class=\"spacer flex justify-evenly\">\n        <button class=\"start button\" aria-label=\"start timer\" #start>\n          <fa-icon [icon]=\"faPlay\"></fa-icon>\n        </button>\n        <button class=\"pause button\" aria-label=\"pause timer\" #pause>\n          <fa-icon [icon]=\"faPause\"></fa-icon>\n        </button>\n        <button class=\"stop button\" aria-label=\"stop timer\" #stop>\n          <fa-icon [icon]=\"faStop\"></fa-icon>\n        </button>\n      </div>\n      <span class=\"spacer\"></span>\n    </div>\n  `,\n  styleUrls: ['./timer-buttons.component.scss'],\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class TimerButtonsComponent implements OnInit, OnDestroy {\n  faPlay = faPlay\n  faStop = faStop\n  faPause = faPause\n\n  @ViewChild('start', { read: ElementRef, static: true })\n  btnStart: ElementRef\n\n  @ViewChild('stop', { read: ElementRef, static: true })\n  btnStop: ElementRef\n\n  @ViewChild('pause', { read: ElementRef, static: true })\n  btnPause: ElementRef\n\n  subscription: Subscription\n\n  ngOnInit(): void {\n    const btnStartClicked$ = fromEvent(this.btnStart.nativeElement, 'click').pipe(mapTo(STATUS.RUNNING))\n    const btnStopClicked$ = fromEvent(this.btnStop.nativeElement, 'click').pipe(mapTo(STATUS.STOP))\n    const btnPausetClicked$ = fromEvent(this.btnPause.nativeElement, 'click').pipe(mapTo(STATUS.PAUSE))\n\n    this.subscription = merge(btnStartClicked$, btnStopClicked$, btnPausetClicked$).pipe(startWith(STATUS.STOP)).subscribe(console.log)\n  }\n\n  ngOnDestroy(): void {\n    if (this.subscription) {\n      this.subscription.unsubscribe()\n    }\n  }\n}\n",
+      "sourceCode": "import { Component, ChangeDetectionStrategy, ViewChild, OnInit, ElementRef, OnDestroy, Output, EventEmitter, Input } from '@angular/core'\nimport { FaIconLibrary } from '@fortawesome/angular-fontawesome'\nimport { faPlay, faStop, faPause } from '@fortawesome/free-solid-svg-icons'\nimport { EMPTY, fromEvent, mapTo, merge, of, scan, startWith, Subscription, switchMap, tap, timer } from 'rxjs'\nimport { STATUS } from '../enums'\n\n@Component({\n  selector: 'app-timer-buttons',\n  template: `\n    <div class=\"flex p-4\">\n      <span class=\"spacer\">{{value}}</span>\n      <div class=\"spacer flex justify-evenly\">\n        <button class=\"start button\" aria-label=\"start timer\" #start>\n          <fa-icon [icon]=\"faPlay\"></fa-icon>\n        </button>\n        <button class=\"pause button\" aria-label=\"pause timer\" #pause>\n          <fa-icon [icon]=\"faPause\"></fa-icon>\n        </button>\n        <button class=\"stop button\" aria-label=\"stop timer\" #stop>\n          <fa-icon [icon]=\"faStop\"></fa-icon>\n        </button>\n      </div>\n      <span class=\"spacer\"></span>\n    </div>\n  `,\n  styleUrls: ['./timer-buttons.component.scss'],\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class TimerButtonsComponent implements OnInit, OnDestroy {\n  faPlay = faPlay\n  faStop = faStop\n  faPause = faPause\n\n  @ViewChild('start', { read: ElementRef, static: true })\n  btnStart: ElementRef\n\n  @ViewChild('stop', { read: ElementRef, static: true })\n  btnStop: ElementRef\n\n  @ViewChild('pause', { read: ElementRef, static: true })\n  btnPause: ElementRef\n\n  @Input()\n  countDownSeconds: number\n\n  @Output()\n  statusChange = new EventEmitter<string>()\n\n  @Output()\n  resetTimer = new EventEmitter<number>()\n\n  @Output()\n  updateRemainingSeconds = new EventEmitter<number>()\n\n  value: number\n\n  subscription: Subscription\n\n  constructor(library: FaIconLibrary) {\n    library.addIcons(faPlay, faPause, faStop)\n  }\n\n  ngOnInit(): void {\n    const btnStartClicked$ = fromEvent(this.btnStart.nativeElement, 'click').pipe(mapTo(STATUS.RUNNING))\n    const btnStopClicked$ = fromEvent(this.btnStop.nativeElement, 'click').pipe(mapTo(STATUS.STOP))\n    const btnPauseClicked$ = fromEvent(this.btnPause.nativeElement, 'click').pipe(mapTo(STATUS.PAUSE))\n\n    this.subscription = merge(btnStartClicked$, btnStopClicked$, btnPauseClicked$)\n      .pipe(\n        startWith(STATUS.STOP),\n        tap((status) => {\n          this.statusChange.emit(status)\n        }),\n        switchMap((status) => {\n          if (status === STATUS.STOP) {\n            this.resetTimer.emit(this.countDownSeconds)\n            return EMPTY\n          }\n          return of(status)\n        }),\n        switchMap((status) => {\n          if (status === STATUS.RUNNING) {\n            return timer(0, 1000)\n          }\n          return EMPTY\n        }),\n        tap(console.log),\n        scan((acc) => acc - 1, this.countDownSeconds),\n      )\n      .subscribe((value) => {\n        console.log(value)\n        this.value = value\n        this.updateRemainingSeconds.emit(value)\n      })\n  }\n\n  ngOnDestroy(): void {\n    if (this.subscription) {\n      this.subscription.unsubscribe()\n    }\n  }\n}\n",
       "assetsDirs": [],
       "styleUrlsData": [
         {
@@ -307,6 +350,32 @@
         }
       ],
       "stylesData": "",
+      "constructorObj": {
+        "name": "constructor",
+        "description": "",
+        "deprecated": false,
+        "deprecationMessage": "",
+        "args": [
+          {
+            "name": "library",
+            "type": "FaIconLibrary",
+            "deprecated": false,
+            "deprecationMessage": ""
+          }
+        ],
+        "line": 57,
+        "jsdoctags": [
+          {
+            "name": "library",
+            "type": "FaIconLibrary",
+            "deprecated": false,
+            "deprecationMessage": "",
+            "tagName": {
+              "text": "param"
+            }
+          }
+        ]
+      },
       "implements": ["OnInit", "OnDestroy"]
     },
     {
@@ -736,6 +805,16 @@
   "miscellaneous": {
     "variables": [
       {
+        "name": "ActionsData",
+        "ctype": "miscellaneous",
+        "subtype": "variable",
+        "file": "src/app/timer/timer-buttons/time-butons.stories.ts",
+        "deprecated": false,
+        "deprecationMessage": "",
+        "type": "object",
+        "defaultValue": "{\n  statusChange: action('statusChange'),\n  resetTimer: action('resetTimer'),\n  updateRemainingSeconds: action('updateRemainingSeconds'),\n}"
+      },
+      {
         "name": "context",
         "ctype": "miscellaneous",
         "subtype": "variable",
@@ -892,7 +971,7 @@
         "deprecated": false,
         "deprecationMessage": "",
         "type": "Story<TimerButtonsComponent>",
-        "defaultValue": "(args: TimerButtonsComponent) => ({\n  props: args,\n})"
+        "defaultValue": "(args: TimerButtonsComponent) => ({\n  props: {\n    ...args,\n    statusChange: ActionsData.statusChange,\n    resetTimer: ActionsData.resetTimer,\n    updateRemainingSeconds: ActionsData.updateRemainingSeconds,\n  },\n})"
       },
       {
         "name": "Template",
@@ -969,6 +1048,38 @@
       }
     ],
     "groupedVariables": {
+      "src/app/timer/timer-buttons/time-butons.stories.ts": [
+        {
+          "name": "ActionsData",
+          "ctype": "miscellaneous",
+          "subtype": "variable",
+          "file": "src/app/timer/timer-buttons/time-butons.stories.ts",
+          "deprecated": false,
+          "deprecationMessage": "",
+          "type": "object",
+          "defaultValue": "{\n  statusChange: action('statusChange'),\n  resetTimer: action('resetTimer'),\n  updateRemainingSeconds: action('updateRemainingSeconds'),\n}"
+        },
+        {
+          "name": "Primary",
+          "ctype": "miscellaneous",
+          "subtype": "variable",
+          "file": "src/app/timer/timer-buttons/time-butons.stories.ts",
+          "deprecated": false,
+          "deprecationMessage": "",
+          "type": "",
+          "defaultValue": "Template.bind({})"
+        },
+        {
+          "name": "Template",
+          "ctype": "miscellaneous",
+          "subtype": "variable",
+          "file": "src/app/timer/timer-buttons/time-butons.stories.ts",
+          "deprecated": false,
+          "deprecationMessage": "",
+          "type": "Story<TimerButtonsComponent>",
+          "defaultValue": "(args: TimerButtonsComponent) => ({\n  props: {\n    ...args,\n    statusChange: ActionsData.statusChange,\n    resetTimer: ActionsData.resetTimer,\n    updateRemainingSeconds: ActionsData.updateRemainingSeconds,\n  },\n})"
+        }
+      ],
       "src/test.ts": [
         {
           "name": "context",
@@ -1161,28 +1272,6 @@
           "type": "Story<AppComponent>",
           "defaultValue": "(args: AppComponent) => ({\n  props: args,\n})"
         }
-      ],
-      "src/app/timer/timer-buttons/time-butons.stories.ts": [
-        {
-          "name": "Primary",
-          "ctype": "miscellaneous",
-          "subtype": "variable",
-          "file": "src/app/timer/timer-buttons/time-butons.stories.ts",
-          "deprecated": false,
-          "deprecationMessage": "",
-          "type": "",
-          "defaultValue": "Template.bind({})"
-        },
-        {
-          "name": "Template",
-          "ctype": "miscellaneous",
-          "subtype": "variable",
-          "file": "src/app/timer/timer-buttons/time-butons.stories.ts",
-          "deprecated": false,
-          "deprecationMessage": "",
-          "type": "Story<TimerButtonsComponent>",
-          "defaultValue": "(args: TimerButtonsComponent) => ({\n  props: args,\n})"
-        }
       ]
     },
     "groupedFunctions": {},
@@ -1260,6 +1349,16 @@
         "type": "variable",
         "linktype": "miscellaneous",
         "linksubtype": "variable",
+        "name": "ActionsData",
+        "coveragePercent": 0,
+        "coverageCount": "0/1",
+        "status": "low"
+      },
+      {
+        "filePath": "src/app/timer/timer-buttons/time-butons.stories.ts",
+        "type": "variable",
+        "linktype": "miscellaneous",
+        "linksubtype": "variable",
         "name": "Primary",
         "coveragePercent": 0,
         "coverageCount": "0/1",
@@ -1281,7 +1380,7 @@
         "linktype": "component",
         "name": "TimerButtonsComponent",
         "coveragePercent": 0,
-        "coverageCount": "0/10",
+        "coverageCount": "0/16",
         "status": "low"
       },
       {
