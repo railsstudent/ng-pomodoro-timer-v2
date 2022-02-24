@@ -32,5 +32,5 @@ const Template: Story<TimerButtonsComponent> = (args: TimerButtonsComponent) => 
 
 export const Primary = Template.bind({})
 Primary.args = {
-  countDownSeconds: 30,
+  countDownSeconds: 20,
 }
