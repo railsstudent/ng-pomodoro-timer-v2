@@ -167,7 +167,7 @@
     },
     {
       "name": "TimerButtonsComponent",
-      "id": "component-TimerButtonsComponent-33780b03a9c34165907132e589f5f524b5de4a5516e8663af9c39c306e914062c8d9595460ade774058b722120e863d1d9c12cebaf5ba45806fc9dae5433f072",
+      "id": "component-TimerButtonsComponent-5fd559d7ab419c8257965b2d482196075dcc1dfeef85cba841d75fd09fd0ba3d21c345c682f8861a40ce61a56838760923f5d8ea7932e41665a3cb8d96a52ff0",
       "file": "src/app/timer/timer-buttons/timer-buttons.component.ts",
       "changeDetection": "ChangeDetectionStrategy.OnPush",
       "encapsulation": [],
@@ -178,7 +178,7 @@
       "selector": "app-timer-buttons",
       "styleUrls": ["./timer-buttons.component.scss"],
       "styles": [],
-      "template": "<div class=\"flex p-4\">\n  <span class=\"spacer\">{{value}}</span>\n  <div class=\"spacer flex justify-evenly\">\n    <button class=\"start button\" aria-label=\"start timer\" #start>\n      <fa-icon [icon]=\"faPlay\"></fa-icon>\n    </button>\n    <button class=\"pause button\" aria-label=\"pause timer\" #pause>\n      <fa-icon [icon]=\"faPause\"></fa-icon>\n    </button>\n    <button class=\"stop button\" aria-label=\"stop timer\" #stop>\n      <fa-icon [icon]=\"faStop\"></fa-icon>\n    </button>\n  </div>\n  <span class=\"spacer\"></span>\n</div>\n",
+      "template": "<div class=\"flex p-4\">\n  <span class=\"spacer\">{{ value }}</span>\n  <div class=\"spacer flex justify-evenly\">\n    <button class=\"start button\" aria-label=\"start timer\" #start>\n      <fa-icon [icon]=\"faPlay\"></fa-icon>\n    </button>\n    <button class=\"pause button\" aria-label=\"pause timer\" #pause>\n      <fa-icon [icon]=\"faPause\"></fa-icon>\n    </button>\n    <button class=\"stop button\" aria-label=\"stop timer\" #stop>\n      <fa-icon [icon]=\"faStop\"></fa-icon>\n    </button>\n  </div>\n  <span class=\"spacer\"></span>\n</div>\n",
       "templateUrl": [],
       "viewProviders": [],
       "inputsClass": [
@@ -186,7 +186,7 @@
           "name": "countDownSeconds",
           "deprecated": false,
           "deprecationMessage": "",
-          "line": 44,
+          "line": 43,
           "type": "number",
           "decorators": []
         }
@@ -197,7 +197,7 @@
           "defaultValue": "new EventEmitter<number>()",
           "deprecated": false,
           "deprecationMessage": "",
-          "line": 50,
+          "line": 49,
           "type": "EventEmitter"
         },
         {
@@ -205,7 +205,7 @@
           "defaultValue": "new EventEmitter<string>()",
           "deprecated": false,
           "deprecationMessage": "",
-          "line": 47,
+          "line": 46,
           "type": "EventEmitter"
         },
         {
@@ -213,7 +213,7 @@
           "defaultValue": "new EventEmitter<number>()",
           "deprecated": false,
           "deprecationMessage": "",
-          "line": 53,
+          "line": 52,
           "type": "EventEmitter"
         }
       ],
@@ -225,7 +225,7 @@
           "type": "ElementRef",
           "optional": false,
           "description": "",
-          "line": 41,
+          "line": 40,
           "decorators": [
             {
               "name": "ViewChild",
@@ -240,7 +240,7 @@
           "type": "ElementRef",
           "optional": false,
           "description": "",
-          "line": 35,
+          "line": 34,
           "decorators": [
             {
               "name": "ViewChild",
@@ -255,7 +255,7 @@
           "type": "ElementRef",
           "optional": false,
           "description": "",
-          "line": 38,
+          "line": 37,
           "decorators": [
             {
               "name": "ViewChild",
@@ -271,7 +271,7 @@
           "type": "",
           "optional": false,
           "description": "",
-          "line": 32
+          "line": 31
         },
         {
           "name": "faPlay",
@@ -281,7 +281,7 @@
           "type": "",
           "optional": false,
           "description": "",
-          "line": 30
+          "line": 29
         },
         {
           "name": "faStop",
@@ -291,16 +291,17 @@
           "type": "",
           "optional": false,
           "description": "",
-          "line": 31
+          "line": 30
         },
         {
-          "name": "subscription",
+          "name": "subscriptions",
+          "defaultValue": "[]",
           "deprecated": false,
           "deprecationMessage": "",
-          "type": "Subscription",
+          "type": "Subscription[]",
           "optional": false,
           "description": "",
-          "line": 57
+          "line": 56
         },
         {
           "name": "value",
@@ -309,7 +310,7 @@
           "type": "number",
           "optional": false,
           "description": "",
-          "line": 55
+          "line": 54
         }
       ],
       "methodsClass": [
@@ -319,7 +320,7 @@
           "optional": false,
           "returnType": "void",
           "typeParameters": [],
-          "line": 97,
+          "line": 105,
           "deprecated": false,
           "deprecationMessage": ""
         },
@@ -329,7 +330,7 @@
           "optional": false,
           "returnType": "void",
           "typeParameters": [],
-          "line": 63,
+          "line": 58,
           "deprecated": false,
           "deprecationMessage": ""
         }
@@ -341,7 +342,7 @@
       "description": "",
       "rawdescription": "\n",
       "type": "component",
-      "sourceCode": "import { Component, ChangeDetectionStrategy, ViewChild, OnInit, ElementRef, OnDestroy, Output, EventEmitter, Input } from '@angular/core'\nimport { FaIconLibrary } from '@fortawesome/angular-fontawesome'\nimport { faPlay, faStop, faPause } from '@fortawesome/free-solid-svg-icons'\nimport { EMPTY, fromEvent, mapTo, merge, of, scan, startWith, Subscription, switchMap, tap, timer } from 'rxjs'\nimport { STATUS } from '../enums'\n\n@Component({\n  selector: 'app-timer-buttons',\n  template: `\n    <div class=\"flex p-4\">\n      <span class=\"spacer\">{{value}}</span>\n      <div class=\"spacer flex justify-evenly\">\n        <button class=\"start button\" aria-label=\"start timer\" #start>\n          <fa-icon [icon]=\"faPlay\"></fa-icon>\n        </button>\n        <button class=\"pause button\" aria-label=\"pause timer\" #pause>\n          <fa-icon [icon]=\"faPause\"></fa-icon>\n        </button>\n        <button class=\"stop button\" aria-label=\"stop timer\" #stop>\n          <fa-icon [icon]=\"faStop\"></fa-icon>\n        </button>\n      </div>\n      <span class=\"spacer\"></span>\n    </div>\n  `,\n  styleUrls: ['./timer-buttons.component.scss'],\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class TimerButtonsComponent implements OnInit, OnDestroy {\n  faPlay = faPlay\n  faStop = faStop\n  faPause = faPause\n\n  @ViewChild('start', { read: ElementRef, static: true })\n  btnStart: ElementRef\n\n  @ViewChild('stop', { read: ElementRef, static: true })\n  btnStop: ElementRef\n\n  @ViewChild('pause', { read: ElementRef, static: true })\n  btnPause: ElementRef\n\n  @Input()\n  countDownSeconds: number\n\n  @Output()\n  statusChange = new EventEmitter<string>()\n\n  @Output()\n  resetTimer = new EventEmitter<number>()\n\n  @Output()\n  updateRemainingSeconds = new EventEmitter<number>()\n\n  value: number\n\n  subscription: Subscription\n\n  constructor(library: FaIconLibrary) {\n    library.addIcons(faPlay, faPause, faStop)\n  }\n\n  ngOnInit(): void {\n    const btnStartClicked$ = fromEvent(this.btnStart.nativeElement, 'click').pipe(mapTo(STATUS.RUNNING))\n    const btnStopClicked$ = fromEvent(this.btnStop.nativeElement, 'click').pipe(mapTo(STATUS.STOP))\n    const btnPauseClicked$ = fromEvent(this.btnPause.nativeElement, 'click').pipe(mapTo(STATUS.PAUSE))\n\n    this.subscription = merge(btnStartClicked$, btnStopClicked$, btnPauseClicked$)\n      .pipe(\n        startWith(STATUS.STOP),\n        tap((status) => {\n          this.statusChange.emit(status)\n        }),\n        switchMap((status) => {\n          if (status === STATUS.STOP) {\n            this.resetTimer.emit(this.countDownSeconds)\n            return EMPTY\n          }\n          return of(status)\n        }),\n        switchMap((status) => {\n          if (status === STATUS.RUNNING) {\n            return timer(0, 1000)\n          }\n          return EMPTY\n        }),\n        tap(console.log),\n        scan((acc) => acc - 1, this.countDownSeconds),\n      )\n      .subscribe((value) => {\n        console.log(value)\n        this.value = value\n        this.updateRemainingSeconds.emit(value)\n      })\n  }\n\n  ngOnDestroy(): void {\n    if (this.subscription) {\n      this.subscription.unsubscribe()\n    }\n  }\n}\n",
+      "sourceCode": "import { Component, ChangeDetectionStrategy, ViewChild, OnInit, ElementRef, OnDestroy, Output, EventEmitter, Input } from '@angular/core'\nimport { faPlay, faStop, faPause } from '@fortawesome/free-solid-svg-icons'\nimport { EMPTY, fromEvent, mapTo, merge, repeat, scan, startWith, Subscription, switchMap, takeWhile, tap, timer } from 'rxjs'\nimport { STATUS } from '../enums'\n\n@Component({\n  selector: 'app-timer-buttons',\n  template: `\n    <div class=\"flex p-4\">\n      <span class=\"spacer\">{{ value }}</span>\n      <div class=\"spacer flex justify-evenly\">\n        <button class=\"start button\" aria-label=\"start timer\" #start>\n          <fa-icon [icon]=\"faPlay\"></fa-icon>\n        </button>\n        <button class=\"pause button\" aria-label=\"pause timer\" #pause>\n          <fa-icon [icon]=\"faPause\"></fa-icon>\n        </button>\n        <button class=\"stop button\" aria-label=\"stop timer\" #stop>\n          <fa-icon [icon]=\"faStop\"></fa-icon>\n        </button>\n      </div>\n      <span class=\"spacer\"></span>\n    </div>\n  `,\n  styleUrls: ['./timer-buttons.component.scss'],\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class TimerButtonsComponent implements OnInit, OnDestroy {\n  faPlay = faPlay\n  faStop = faStop\n  faPause = faPause\n\n  @ViewChild('start', { read: ElementRef, static: true })\n  btnStart: ElementRef\n\n  @ViewChild('stop', { read: ElementRef, static: true })\n  btnStop: ElementRef\n\n  @ViewChild('pause', { read: ElementRef, static: true })\n  btnPause: ElementRef\n\n  @Input()\n  countDownSeconds: number\n\n  @Output()\n  statusChange = new EventEmitter<string>()\n\n  @Output()\n  resetTimer = new EventEmitter<number>()\n\n  @Output()\n  updateRemainingSeconds = new EventEmitter<number>()\n\n  value: number\n\n  subscriptions: Subscription[] = []\n\n  ngOnInit(): void {\n    const btnStartClicked$ = fromEvent(this.btnStart.nativeElement, 'click').pipe(mapTo(STATUS.RUNNING))\n    const btnStopClicked$ = fromEvent(this.btnStop.nativeElement, 'click').pipe(mapTo(STATUS.STOP))\n    const btnPauseClicked$ = fromEvent(this.btnPause.nativeElement, 'click').pipe(mapTo(STATUS.PAUSE))\n\n    const timerStream$ = merge(btnStartClicked$, btnPauseClicked$).pipe(\n      startWith(STATUS.STOP),\n      tap((status) => this.statusChange.emit(status)),\n      switchMap((status) => {\n        if (status === STATUS.RUNNING) {\n          return timer(0, 1000)\n        }\n        return EMPTY\n      }),\n      mapTo(-1),\n      scan((acc, value) => acc + value, this.countDownSeconds + 1),\n      takeWhile((value) => value >= 0),\n      repeat(),\n    )\n\n    // https://stackoverflow.com/questions/69945765/rxjs-way-to-unsubscribe-after-button-click-but-with-opportunity-to-subscribe-aga\n    // https://stackoverflow.com/questions/69119769/how-to-add-a-stop-and-start-feature-for-an-rxjs-timer\n    let subscription = timerStream$.subscribe((value) => {\n      this.value = value\n      this.updateRemainingSeconds.emit(value)\n    })\n\n    const btnStopSubscription = btnStopClicked$\n      .pipe(\n        tap(() => {\n          // unsubscribe timer\n          subscription.unsubscribe()\n          // resubscribe timer\n          subscription = new Subscription()\n          subscription.add(\n            timerStream$.subscribe((value) => {\n              this.value = value\n              this.updateRemainingSeconds.emit(value)\n            }),\n          )\n        }),\n      )\n      .subscribe()\n\n    this.subscriptions.push(subscription, btnStopSubscription)\n  }\n\n  ngOnDestroy(): void {\n    for (const subscription of this.subscriptions) {\n      subscription.unsubscribe()\n    }\n  }\n}\n",
       "assetsDirs": [],
       "styleUrlsData": [
         {
@@ -350,32 +351,6 @@
         }
       ],
       "stylesData": "",
-      "constructorObj": {
-        "name": "constructor",
-        "description": "",
-        "deprecated": false,
-        "deprecationMessage": "",
-        "args": [
-          {
-            "name": "library",
-            "type": "FaIconLibrary",
-            "deprecated": false,
-            "deprecationMessage": ""
-          }
-        ],
-        "line": 57,
-        "jsdoctags": [
-          {
-            "name": "library",
-            "type": "FaIconLibrary",
-            "deprecated": false,
-            "deprecationMessage": "",
-            "tagName": {
-              "text": "param"
-            }
-          }
-        ]
-      },
       "implements": ["OnInit", "OnDestroy"]
     },
     {
@@ -1380,7 +1355,7 @@
         "linktype": "component",
         "name": "TimerButtonsComponent",
         "coveragePercent": 0,
-        "coverageCount": "0/16",
+        "coverageCount": "0/15",
         "status": "low"
       },
       {

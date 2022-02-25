@@ -17,7 +17,6 @@ export default {
 
 export const ActionsData = {
   statusChange: action('statusChange'),
-  resetTimer: action('resetTimer'),
   updateRemainingSeconds: action('updateRemainingSeconds'),
 }
 
@@ -25,12 +24,16 @@ const Template: Story<TimerButtonsComponent> = (args: TimerButtonsComponent) => 
   props: {
     ...args,
     statusChange: ActionsData.statusChange,
-    resetTimer: ActionsData.resetTimer,
     updateRemainingSeconds: ActionsData.updateRemainingSeconds,
   },
 })
 
-export const Primary = Template.bind({})
-Primary.args = {
+export const TwoMinutesTimer = Template.bind({})
+TwoMinutesTimer.args = {
+  countDownSeconds: 120,
+}
+
+export const QuickPrimary = Template.bind({})
+QuickPrimary.args = {
   countDownSeconds: 20,
 }

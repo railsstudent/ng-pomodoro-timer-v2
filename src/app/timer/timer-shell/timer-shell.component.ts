@@ -7,7 +7,11 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core'
       <div>
         <app-timer-message class="mb-6" [status]="status"></app-timer-message>
         <app-timer-display class="mb-8" [totalSeconds]="totalSeconds"></app-timer-display>
-        <app-timer-buttons></app-timer-buttons>
+        <app-timer-buttons
+          [countDownSeconds]="totalSeconds"
+          (statusChange)="statusChange($event)"
+          (updateRemainingSeconds)="updateRemainingSeconds($event)"
+        ></app-timer-buttons>
       </div>
     </div>
   `,
@@ -26,4 +30,12 @@ export class TimerShellComponent {
   totalSeconds = 900
 
   status = 'STOP'
+
+  statusChange(otherStatus: string) {
+    this.status = otherStatus
+  }
+
+  updateRemainingSeconds(secondsRemained: number) {
+    this.totalSeconds = secondsRemained
+  }
 }

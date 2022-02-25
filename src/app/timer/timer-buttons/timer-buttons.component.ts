@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, ViewChild, OnInit, ElementRef, OnDestroy, Output, EventEmitter, Input } from '@angular/core'
 import { faPlay, faStop, faPause } from '@fortawesome/free-solid-svg-icons'
-import { EMPTY, fromEvent, mapTo, merge, repeat, scan, startWith, Subscription, switchMap, takeUntil, takeWhile, tap, timer } from 'rxjs'
+import { EMPTY, fromEvent, mapTo, merge, repeat, scan, startWith, Subscription, switchMap, takeWhile, tap, timer } from 'rxjs'
 import { STATUS } from '../enums'
 
 @Component({
@@ -46,9 +46,6 @@ export class TimerButtonsComponent implements OnInit, OnDestroy {
   statusChange = new EventEmitter<string>()
 
   @Output()
-  resetTimer = new EventEmitter<number>()
-
-  @Output()
   updateRemainingSeconds = new EventEmitter<number>()
 
   value: number
@@ -60,8 +57,8 @@ export class TimerButtonsComponent implements OnInit, OnDestroy {
     const btnStopClicked$ = fromEvent(this.btnStop.nativeElement, 'click').pipe(mapTo(STATUS.STOP))
     const btnPauseClicked$ = fromEvent(this.btnPause.nativeElement, 'click').pipe(mapTo(STATUS.PAUSE))
 
+    this.value = this.countDownSeconds
     const timerStream$ = merge(btnStartClicked$, btnPauseClicked$).pipe(
-      startWith(STATUS.STOP),
       tap((status) => this.statusChange.emit(status)),
       switchMap((status) => {
         if (status === STATUS.RUNNING) {
@@ -70,9 +67,10 @@ export class TimerButtonsComponent implements OnInit, OnDestroy {
         return EMPTY
       }),
       mapTo(-1),
-      scan((acc, value) => acc + value, this.countDownSeconds + 1),
+      scan((acc, value) => acc + value, this.countDownSeconds),
       takeWhile((value) => value >= 0),
       repeat(),
+      startWith(this.countDownSeconds),
     )
 
     // https://stackoverflow.com/questions/69945765/rxjs-way-to-unsubscribe-after-button-click-but-with-opportunity-to-subscribe-aga
