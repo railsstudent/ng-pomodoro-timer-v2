@@ -7,7 +7,7 @@ import { STATUS } from '../enums'
   selector: 'app-timer-buttons',
   template: `
     <div class="flex p-4">
-      <span class="spacer">{{ value }}</span>
+      <span class="spacer"></span>
       <div class="spacer flex justify-evenly">
         <button class="start button" aria-label="start timer" #start>
           <fa-icon [icon]="faPlay"></fa-icon>
@@ -48,8 +48,6 @@ export class TimerButtonsComponent implements OnInit, OnDestroy {
   @Output()
   updateRemainingSeconds = new EventEmitter<number>()
 
-  value: number
-
   subscriptions: Subscription[] = []
 
   ngOnInit(): void {
@@ -57,7 +55,6 @@ export class TimerButtonsComponent implements OnInit, OnDestroy {
     const btnStopClicked$ = fromEvent(this.btnStop.nativeElement, 'click').pipe(mapTo(STATUS.STOP))
     const btnPauseClicked$ = fromEvent(this.btnPause.nativeElement, 'click').pipe(mapTo(STATUS.PAUSE))
 
-    this.value = this.countDownSeconds
     const timerStream$ = merge(btnStartClicked$, btnPauseClicked$).pipe(
       tap((status) => this.statusChange.emit(status)),
       switchMap((status) => {
@@ -76,20 +73,20 @@ export class TimerButtonsComponent implements OnInit, OnDestroy {
     // https://stackoverflow.com/questions/69945765/rxjs-way-to-unsubscribe-after-button-click-but-with-opportunity-to-subscribe-aga
     // https://stackoverflow.com/questions/69119769/how-to-add-a-stop-and-start-feature-for-an-rxjs-timer
     let subscription = timerStream$.subscribe((value) => {
-      this.value = value
       this.updateRemainingSeconds.emit(value)
     })
 
     const btnStopSubscription = btnStopClicked$
       .pipe(
         tap(() => {
+          this.statusChange.emit(STATUS.STOP)
+
           // unsubscribe timer
           subscription.unsubscribe()
           // resubscribe timer
           subscription = new Subscription()
           subscription.add(
             timerStream$.subscribe((value) => {
-              this.value = value
               this.updateRemainingSeconds.emit(value)
             }),
           )
