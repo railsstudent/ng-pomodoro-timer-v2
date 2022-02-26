@@ -63,7 +63,7 @@ export class TimerButtonsComponent implements OnInit, OnDestroy {
         tap((status) => {
           this.statusChange.emit(status)
         }),
-        switchMap((status) => (status === STATUS.RUNNING) ? timer(0, 1000) : EMPTY),
+        switchMap((status) => (status === STATUS.RUNNING ? timer(0, 1000) : EMPTY)),
         mapTo(-1),
         scan((acc, value) => acc + value, this.countDownSeconds),
         takeWhile((value) => value >= 0),
