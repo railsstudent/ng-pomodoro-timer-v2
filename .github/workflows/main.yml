@@ -38,13 +38,13 @@ jobs:
       run: npm install
 
     - name: Publish to Chromatic
-        uses: chromaui/action@v1
-        # Chromatic GitHub Action options
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
-          exitZeroOnChanges: true
-          autoAcceptChanges: true
+      uses: chromaui/action@v1
+      # Chromatic GitHub Action options
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+        exitZeroOnChanges: true
+        autoAcceptChanges: true
 
     - name: Build and Deploy Repo
       env:
