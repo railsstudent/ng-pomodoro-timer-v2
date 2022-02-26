@@ -1,0 +1,7 @@
+import { STATUS } from '../enums'
+
+export const BUTTON_STATE_MAP = {
+  [STATUS.RUNNING]: [STATUS.STOP, STATUS.PAUSE],
+  [STATUS.PAUSE]: [STATUS.RUNNING],
+  [STATUS.STOP]: [STATUS.RUNNING],
+}

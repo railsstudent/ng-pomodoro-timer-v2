@@ -1,7 +1,25 @@
 import { Component, ChangeDetectionStrategy, ViewChild, OnInit, ElementRef, OnDestroy, Output, EventEmitter, Input } from '@angular/core'
 import { faPlay, faStop, faPause } from '@fortawesome/free-solid-svg-icons'
-import { EMPTY, fromEvent, mapTo, merge, repeat, scan, startWith, Subscription, switchMap, takeUntil, takeWhile, tap, timer } from 'rxjs'
+import {
+  EMPTY,
+  filter,
+  fromEvent,
+  map,
+  mapTo,
+  merge,
+  repeat,
+  scan,
+  startWith,
+  Subscription,
+  switchMap,
+  takeUntil,
+  takeWhile,
+  tap,
+  timer,
+} from 'rxjs'
 import { STATUS } from '../enums'
+import { BUTTON_STATE_MAP } from './timer-buttons.constant'
+import { ButtonActions } from './timer-buttons.interface'
 
 @Component({
   selector: 'app-timer-buttons',
@@ -48,7 +66,7 @@ export class TimerButtonsComponent implements OnInit, OnDestroy {
   @Output()
   updateRemainingSeconds = new EventEmitter<number>()
 
-  subscriptions: Subscription[] = []
+  subscription: Subscription
 
   ngOnInit(): void {
     const btnStartClicked$ = fromEvent(this.btnStart.nativeElement, 'click').pipe(mapTo(STATUS.RUNNING))
@@ -58,8 +76,17 @@ export class TimerButtonsComponent implements OnInit, OnDestroy {
     )
     const btnPauseClicked$ = fromEvent(this.btnPause.nativeElement, 'click').pipe(mapTo(STATUS.PAUSE))
 
-    const subscription = merge(btnStartClicked$, btnPauseClicked$)
+    this.subscription = merge(btnStartClicked$, btnPauseClicked$)
       .pipe(
+        scan(
+          (acc: ButtonActions, status) => ({
+            status,
+            previousStatus: acc.status,
+          }),
+          { status: undefined, previousStatus: undefined },
+        ),
+        filter((buttonActions) => this.isButtonActionAllowed(buttonActions)),
+        map((buttonActions) => buttonActions.status || STATUS.PAUSE),
         tap((status) => {
           this.statusChange.emit(status)
         }),
@@ -72,15 +99,27 @@ export class TimerButtonsComponent implements OnInit, OnDestroy {
         repeat(),
       )
       .subscribe((value) => {
-        this.updateRemainingSeconds.emit(value)
+        if (typeof value === 'number') {
+          this.updateRemainingSeconds.emit(value)
+        }
       })
+  }
 
-    this.subscriptions.push(subscription)
+  isButtonActionAllowed({ status, previousStatus }: ButtonActions) {
+    if (!status) {
+      return false
+    }
+
+    if (previousStatus) {
+      const allowedStatus = BUTTON_STATE_MAP[previousStatus]
+      return allowedStatus.includes(status)
+    }
+    return status == STATUS.RUNNING
   }
 
   ngOnDestroy(): void {
-    for (const subscription of this.subscriptions) {
-      subscription.unsubscribe()
+    if (this.subscription) {
+      this.subscription.unsubscribe()
     }
   }
 }
