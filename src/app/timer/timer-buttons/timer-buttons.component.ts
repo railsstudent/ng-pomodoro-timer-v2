@@ -25,7 +25,7 @@ import { ButtonActions } from './timer-buttons.interface'
   selector: 'app-timer-buttons',
   template: `
     <div class="flex p-4">
-      <span class="spacer"></span>
+      <span class="spacer">{{ debugMode ? value : '' }}</span>
       <div class="spacer flex justify-evenly">
         <button class="start button" aria-label="start timer" #start>
           <fa-icon [icon]="faPlay"></fa-icon>
@@ -60,6 +60,9 @@ export class TimerButtonsComponent implements OnInit, OnDestroy {
   @Input()
   countDownSeconds: number
 
+  @Input()
+  debugMode = false
+
   @Output()
   statusChange = new EventEmitter<string>()
 
@@ -67,6 +70,8 @@ export class TimerButtonsComponent implements OnInit, OnDestroy {
   updateRemainingSeconds = new EventEmitter<number>()
 
   subscription: Subscription
+
+  value: number
 
   ngOnInit(): void {
     const btnStartClicked$ = fromEvent(this.btnStart.nativeElement, 'click').pipe(mapTo(STATUS.RUNNING))
@@ -100,6 +105,7 @@ export class TimerButtonsComponent implements OnInit, OnDestroy {
       )
       .subscribe((value) => {
         if (typeof value === 'number') {
+          this.value = value
           this.updateRemainingSeconds.emit(value)
         }
       })

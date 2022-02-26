@@ -31,9 +31,11 @@ const Template: Story<TimerButtonsComponent> = (args: TimerButtonsComponent) => 
 export const TwoMinutesTimer = Template.bind({})
 TwoMinutesTimer.args = {
   countDownSeconds: 120,
+  debugMode: true,
 }
 
 export const QuickPrimary = Template.bind({})
 QuickPrimary.args = {
   countDownSeconds: 20,
+  debugMode: true,
 }

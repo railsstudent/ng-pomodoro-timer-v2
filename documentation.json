@@ -116,7 +116,40 @@
       "sourceCode": "import { Pipe, PipeTransform } from '@angular/core'\nimport { STATUS } from '../enums'\n\n@Pipe({\n  name: 'convertStatusToMessage',\n})\nexport class ConvertStatusToMessagePipe implements PipeTransform {\n  transform(status: string): string {\n    const messageMap = {\n      [STATUS.STOP]: 'Let the countdown begin!!',\n      [STATUS.RUNNING]: 'Greatness is within sight!!',\n      [STATUS.PAUSE]: 'Never quit keep going!!',\n    }\n\n    const typedStatusString = status as keyof typeof STATUS\n    const typedStatus = STATUS[typedStatusString]\n    return messageMap[typedStatus] || ''\n  }\n}\n"
     }
   ],
-  "interfaces": [],
+  "interfaces": [
+    {
+      "name": "ButtonActions",
+      "id": "interface-ButtonActions-3db61767cf6ed03ea51a0dc8b786c4550ec7fb5ff41ab68dc55c9203f8b8f1506e2c53cc677ef64d894ad73212697e8fa824ff4b3353c7915e07aea264c4a2f6",
+      "file": "src/app/timer/timer-buttons/timer-buttons.interface.ts",
+      "deprecated": false,
+      "deprecationMessage": "",
+      "type": "interface",
+      "sourceCode": "import { STATUS } from '../enums'\n\nexport interface ButtonActions {\n  status?: STATUS\n  previousStatus?: STATUS\n}\n",
+      "properties": [
+        {
+          "name": "previousStatus",
+          "deprecated": false,
+          "deprecationMessage": "",
+          "type": "STATUS",
+          "optional": true,
+          "description": "",
+          "line": 5
+        },
+        {
+          "name": "status",
+          "deprecated": false,
+          "deprecationMessage": "",
+          "type": "STATUS",
+          "optional": true,
+          "description": "",
+          "line": 4
+        }
+      ],
+      "indexSignatures": [],
+      "kind": 165,
+      "methods": []
+    }
+  ],
   "injectables": [],
   "guards": [],
   "interceptors": [],
@@ -167,7 +200,7 @@
     },
     {
       "name": "TimerButtonsComponent",
-      "id": "component-TimerButtonsComponent-5fd559d7ab419c8257965b2d482196075dcc1dfeef85cba841d75fd09fd0ba3d21c345c682f8861a40ce61a56838760923f5d8ea7932e41665a3cb8d96a52ff0",
+      "id": "component-TimerButtonsComponent-511a3463ea3f7a4214ba14ec3122d22cb7f2e34d8ad6741b7d4d420154129c13e39cf86b8293dbce0607c0fe57450941a0eb23a85642e28a8ae083fc5ffbead9",
       "file": "src/app/timer/timer-buttons/timer-buttons.component.ts",
       "changeDetection": "ChangeDetectionStrategy.OnPush",
       "encapsulation": [],
@@ -178,7 +211,7 @@
       "selector": "app-timer-buttons",
       "styleUrls": ["./timer-buttons.component.scss"],
       "styles": [],
-      "template": "<div class=\"flex p-4\">\n  <span class=\"spacer\">{{ value }}</span>\n  <div class=\"spacer flex justify-evenly\">\n    <button class=\"start button\" aria-label=\"start timer\" #start>\n      <fa-icon [icon]=\"faPlay\"></fa-icon>\n    </button>\n    <button class=\"pause button\" aria-label=\"pause timer\" #pause>\n      <fa-icon [icon]=\"faPause\"></fa-icon>\n    </button>\n    <button class=\"stop button\" aria-label=\"stop timer\" #stop>\n      <fa-icon [icon]=\"faStop\"></fa-icon>\n    </button>\n  </div>\n  <span class=\"spacer\"></span>\n</div>\n",
+      "template": "<div class=\"flex p-4\">\n  <span class=\"spacer\">{{ debugMode ? value : '' }}</span>\n  <div class=\"spacer flex justify-evenly\">\n    <button class=\"start button\" aria-label=\"start timer\" #start>\n      <fa-icon [icon]=\"faPlay\"></fa-icon>\n    </button>\n    <button class=\"pause button\" aria-label=\"pause timer\" #pause>\n      <fa-icon [icon]=\"faPause\"></fa-icon>\n    </button>\n    <button class=\"stop button\" aria-label=\"stop timer\" #stop>\n      <fa-icon [icon]=\"faStop\"></fa-icon>\n    </button>\n  </div>\n  <span class=\"spacer\"></span>\n</div>\n",
       "templateUrl": [],
       "viewProviders": [],
       "inputsClass": [
@@ -186,26 +219,27 @@
           "name": "countDownSeconds",
           "deprecated": false,
           "deprecationMessage": "",
-          "line": 43,
+          "line": 61,
           "type": "number",
+          "decorators": []
+        },
+        {
+          "name": "debugMode",
+          "defaultValue": "false",
+          "deprecated": false,
+          "deprecationMessage": "",
+          "line": 64,
+          "type": "boolean",
           "decorators": []
         }
       ],
       "outputsClass": [
         {
-          "name": "resetTimer",
-          "defaultValue": "new EventEmitter<number>()",
-          "deprecated": false,
-          "deprecationMessage": "",
-          "line": 49,
-          "type": "EventEmitter"
-        },
-        {
           "name": "statusChange",
           "defaultValue": "new EventEmitter<string>()",
           "deprecated": false,
           "deprecationMessage": "",
-          "line": 46,
+          "line": 67,
           "type": "EventEmitter"
         },
         {
@@ -213,7 +247,7 @@
           "defaultValue": "new EventEmitter<number>()",
           "deprecated": false,
           "deprecationMessage": "",
-          "line": 52,
+          "line": 70,
           "type": "EventEmitter"
         }
       ],
@@ -225,7 +259,7 @@
           "type": "ElementRef",
           "optional": false,
           "description": "",
-          "line": 40,
+          "line": 58,
           "decorators": [
             {
               "name": "ViewChild",
@@ -240,7 +274,7 @@
           "type": "ElementRef",
           "optional": false,
           "description": "",
-          "line": 34,
+          "line": 52,
           "decorators": [
             {
               "name": "ViewChild",
@@ -255,7 +289,7 @@
           "type": "ElementRef",
           "optional": false,
           "description": "",
-          "line": 37,
+          "line": 55,
           "decorators": [
             {
               "name": "ViewChild",
@@ -271,7 +305,7 @@
           "type": "",
           "optional": false,
           "description": "",
-          "line": 31
+          "line": 49
         },
         {
           "name": "faPlay",
@@ -281,7 +315,7 @@
           "type": "",
           "optional": false,
           "description": "",
-          "line": 29
+          "line": 47
         },
         {
           "name": "faStop",
@@ -291,17 +325,16 @@
           "type": "",
           "optional": false,
           "description": "",
-          "line": 30
+          "line": 48
         },
         {
-          "name": "subscriptions",
-          "defaultValue": "[]",
+          "name": "subscription",
           "deprecated": false,
           "deprecationMessage": "",
-          "type": "Subscription[]",
+          "type": "Subscription",
           "optional": false,
           "description": "",
-          "line": 56
+          "line": 72
         },
         {
           "name": "value",
@@ -310,17 +343,43 @@
           "type": "number",
           "optional": false,
           "description": "",
-          "line": 54
+          "line": 74
         }
       ],
       "methodsClass": [
+        {
+          "name": "isButtonActionAllowed",
+          "args": [
+            {
+              "type": "ButtonActions",
+              "deprecated": false,
+              "deprecationMessage": ""
+            }
+          ],
+          "optional": false,
+          "returnType": "any",
+          "typeParameters": [],
+          "line": 114,
+          "deprecated": false,
+          "deprecationMessage": "",
+          "jsdoctags": [
+            {
+              "type": "ButtonActions",
+              "deprecated": false,
+              "deprecationMessage": "",
+              "tagName": {
+                "text": "param"
+              }
+            }
+          ]
+        },
         {
           "name": "ngOnDestroy",
           "args": [],
           "optional": false,
           "returnType": "void",
           "typeParameters": [],
-          "line": 105,
+          "line": 126,
           "deprecated": false,
           "deprecationMessage": ""
         },
@@ -330,7 +389,7 @@
           "optional": false,
           "returnType": "void",
           "typeParameters": [],
-          "line": 58,
+          "line": 76,
           "deprecated": false,
           "deprecationMessage": ""
         }
@@ -342,7 +401,7 @@
       "description": "",
       "rawdescription": "\n",
       "type": "component",
-      "sourceCode": "import { Component, ChangeDetectionStrategy, ViewChild, OnInit, ElementRef, OnDestroy, Output, EventEmitter, Input } from '@angular/core'\nimport { faPlay, faStop, faPause } from '@fortawesome/free-solid-svg-icons'\nimport { EMPTY, fromEvent, mapTo, merge, repeat, scan, startWith, Subscription, switchMap, takeWhile, tap, timer } from 'rxjs'\nimport { STATUS } from '../enums'\n\n@Component({\n  selector: 'app-timer-buttons',\n  template: `\n    <div class=\"flex p-4\">\n      <span class=\"spacer\">{{ value }}</span>\n      <div class=\"spacer flex justify-evenly\">\n        <button class=\"start button\" aria-label=\"start timer\" #start>\n          <fa-icon [icon]=\"faPlay\"></fa-icon>\n        </button>\n        <button class=\"pause button\" aria-label=\"pause timer\" #pause>\n          <fa-icon [icon]=\"faPause\"></fa-icon>\n        </button>\n        <button class=\"stop button\" aria-label=\"stop timer\" #stop>\n          <fa-icon [icon]=\"faStop\"></fa-icon>\n        </button>\n      </div>\n      <span class=\"spacer\"></span>\n    </div>\n  `,\n  styleUrls: ['./timer-buttons.component.scss'],\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class TimerButtonsComponent implements OnInit, OnDestroy {\n  faPlay = faPlay\n  faStop = faStop\n  faPause = faPause\n\n  @ViewChild('start', { read: ElementRef, static: true })\n  btnStart: ElementRef\n\n  @ViewChild('stop', { read: ElementRef, static: true })\n  btnStop: ElementRef\n\n  @ViewChild('pause', { read: ElementRef, static: true })\n  btnPause: ElementRef\n\n  @Input()\n  countDownSeconds: number\n\n  @Output()\n  statusChange = new EventEmitter<string>()\n\n  @Output()\n  resetTimer = new EventEmitter<number>()\n\n  @Output()\n  updateRemainingSeconds = new EventEmitter<number>()\n\n  value: number\n\n  subscriptions: Subscription[] = []\n\n  ngOnInit(): void {\n    const btnStartClicked$ = fromEvent(this.btnStart.nativeElement, 'click').pipe(mapTo(STATUS.RUNNING))\n    const btnStopClicked$ = fromEvent(this.btnStop.nativeElement, 'click').pipe(mapTo(STATUS.STOP))\n    const btnPauseClicked$ = fromEvent(this.btnPause.nativeElement, 'click').pipe(mapTo(STATUS.PAUSE))\n\n    const timerStream$ = merge(btnStartClicked$, btnPauseClicked$).pipe(\n      startWith(STATUS.STOP),\n      tap((status) => this.statusChange.emit(status)),\n      switchMap((status) => {\n        if (status === STATUS.RUNNING) {\n          return timer(0, 1000)\n        }\n        return EMPTY\n      }),\n      mapTo(-1),\n      scan((acc, value) => acc + value, this.countDownSeconds + 1),\n      takeWhile((value) => value >= 0),\n      repeat(),\n    )\n\n    // https://stackoverflow.com/questions/69945765/rxjs-way-to-unsubscribe-after-button-click-but-with-opportunity-to-subscribe-aga\n    // https://stackoverflow.com/questions/69119769/how-to-add-a-stop-and-start-feature-for-an-rxjs-timer\n    let subscription = timerStream$.subscribe((value) => {\n      this.value = value\n      this.updateRemainingSeconds.emit(value)\n    })\n\n    const btnStopSubscription = btnStopClicked$\n      .pipe(\n        tap(() => {\n          // unsubscribe timer\n          subscription.unsubscribe()\n          // resubscribe timer\n          subscription = new Subscription()\n          subscription.add(\n            timerStream$.subscribe((value) => {\n              this.value = value\n              this.updateRemainingSeconds.emit(value)\n            }),\n          )\n        }),\n      )\n      .subscribe()\n\n    this.subscriptions.push(subscription, btnStopSubscription)\n  }\n\n  ngOnDestroy(): void {\n    for (const subscription of this.subscriptions) {\n      subscription.unsubscribe()\n    }\n  }\n}\n",
+      "sourceCode": "import { Component, ChangeDetectionStrategy, ViewChild, OnInit, ElementRef, OnDestroy, Output, EventEmitter, Input } from '@angular/core'\nimport { faPlay, faStop, faPause } from '@fortawesome/free-solid-svg-icons'\nimport {\n  EMPTY,\n  filter,\n  fromEvent,\n  map,\n  mapTo,\n  merge,\n  repeat,\n  scan,\n  startWith,\n  Subscription,\n  switchMap,\n  takeUntil,\n  takeWhile,\n  tap,\n  timer,\n} from 'rxjs'\nimport { STATUS } from '../enums'\nimport { BUTTON_STATE_MAP } from './timer-buttons.constant'\nimport { ButtonActions } from './timer-buttons.interface'\n\n@Component({\n  selector: 'app-timer-buttons',\n  template: `\n    <div class=\"flex p-4\">\n      <span class=\"spacer\">{{ debugMode ? value : '' }}</span>\n      <div class=\"spacer flex justify-evenly\">\n        <button class=\"start button\" aria-label=\"start timer\" #start>\n          <fa-icon [icon]=\"faPlay\"></fa-icon>\n        </button>\n        <button class=\"pause button\" aria-label=\"pause timer\" #pause>\n          <fa-icon [icon]=\"faPause\"></fa-icon>\n        </button>\n        <button class=\"stop button\" aria-label=\"stop timer\" #stop>\n          <fa-icon [icon]=\"faStop\"></fa-icon>\n        </button>\n      </div>\n      <span class=\"spacer\"></span>\n    </div>\n  `,\n  styleUrls: ['./timer-buttons.component.scss'],\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class TimerButtonsComponent implements OnInit, OnDestroy {\n  faPlay = faPlay\n  faStop = faStop\n  faPause = faPause\n\n  @ViewChild('start', { read: ElementRef, static: true })\n  btnStart: ElementRef\n\n  @ViewChild('stop', { read: ElementRef, static: true })\n  btnStop: ElementRef\n\n  @ViewChild('pause', { read: ElementRef, static: true })\n  btnPause: ElementRef\n\n  @Input()\n  countDownSeconds: number\n\n  @Input()\n  debugMode = false\n\n  @Output()\n  statusChange = new EventEmitter<string>()\n\n  @Output()\n  updateRemainingSeconds = new EventEmitter<number>()\n\n  subscription: Subscription\n\n  value: number\n\n  ngOnInit(): void {\n    const btnStartClicked$ = fromEvent(this.btnStart.nativeElement, 'click').pipe(mapTo(STATUS.RUNNING))\n    const btnStopClicked$ = fromEvent(this.btnStop.nativeElement, 'click').pipe(\n      mapTo(STATUS.STOP),\n      tap(() => this.statusChange.emit(STATUS.STOP)),\n    )\n    const btnPauseClicked$ = fromEvent(this.btnPause.nativeElement, 'click').pipe(mapTo(STATUS.PAUSE))\n\n    this.subscription = merge(btnStartClicked$, btnPauseClicked$)\n      .pipe(\n        scan(\n          (acc: ButtonActions, status) => ({\n            status,\n            previousStatus: acc.status,\n          }),\n          { status: undefined, previousStatus: undefined },\n        ),\n        filter((buttonActions) => this.isButtonActionAllowed(buttonActions)),\n        map((buttonActions) => buttonActions.status || STATUS.PAUSE),\n        tap((status) => {\n          this.statusChange.emit(status)\n        }),\n        switchMap((status) => (status === STATUS.RUNNING ? timer(0, 1000) : EMPTY)),\n        mapTo(-1),\n        scan((acc, value) => acc + value, this.countDownSeconds),\n        takeWhile((value) => value >= 0),\n        takeUntil(btnStopClicked$),\n        startWith(this.countDownSeconds),\n        repeat(),\n      )\n      .subscribe((value) => {\n        if (typeof value === 'number') {\n          this.value = value\n          this.updateRemainingSeconds.emit(value)\n        }\n      })\n  }\n\n  isButtonActionAllowed({ status, previousStatus }: ButtonActions) {\n    if (!status) {\n      return false\n    }\n\n    if (previousStatus) {\n      const allowedStatus = BUTTON_STATE_MAP[previousStatus]\n      return allowedStatus.includes(status)\n    }\n    return status == STATUS.RUNNING\n  }\n\n  ngOnDestroy(): void {\n    if (this.subscription) {\n      this.subscription.unsubscribe()\n    }\n  }\n}\n",
       "assetsDirs": [],
       "styleUrlsData": [
         {
@@ -437,7 +496,7 @@
     },
     {
       "name": "TimerShellComponent",
-      "id": "component-TimerShellComponent-b958fe4e965c97f357f639b3944219e31a47859b1878c1411a1f82678b24ebeb9d154f2997b08be59e127d809eb7ff419fc0cdf65288973c8e1a08d2cc9d1dd6",
+      "id": "component-TimerShellComponent-dcd4587c6425f40242ae366419c9b1afa6bba77278f7fd84fac6a03b2c7de325cd80dee45a56b49eb543ce6f6f14e77df500ab038df5e15b3fb1cabba1769fa0",
       "file": "src/app/timer/timer-shell/timer-shell.component.ts",
       "changeDetection": "ChangeDetectionStrategy.OnPush",
       "encapsulation": [],
@@ -450,7 +509,7 @@
       "styles": [
         "\n      :host {\n        display: block;\n        height: 100vh;\n      }\n    "
       ],
-      "template": "<div class=\"h-full bg-sky-400 flex flex-col justify-center\">\n  <div>\n    <app-timer-message class=\"mb-6\" [status]=\"status\"></app-timer-message>\n    <app-timer-display class=\"mb-8\" [totalSeconds]=\"totalSeconds\"></app-timer-display>\n    <app-timer-buttons></app-timer-buttons>\n  </div>\n</div>\n",
+      "template": "<div class=\"h-full bg-sky-400 flex flex-col justify-center\">\n  <div>\n    <app-timer-message class=\"mb-6\" [status]=\"status\"></app-timer-message>\n    <app-timer-display class=\"mb-8\" [totalSeconds]=\"totalSeconds\"></app-timer-display>\n    <app-timer-buttons\n      [countDownSeconds]=\"totalSeconds\"\n      (statusChange)=\"statusChange($event)\"\n      (updateRemainingSeconds)=\"updateRemainingSeconds($event)\"\n    ></app-timer-buttons>\n  </div>\n</div>\n",
       "templateUrl": [],
       "viewProviders": [],
       "inputsClass": [
@@ -459,7 +518,7 @@
           "defaultValue": "900",
           "deprecated": false,
           "deprecationMessage": "",
-          "line": 26,
+          "line": 30,
           "type": "number",
           "decorators": []
         }
@@ -474,10 +533,67 @@
           "type": "string",
           "optional": false,
           "description": "",
-          "line": 28
+          "line": 32
         }
       ],
-      "methodsClass": [],
+      "methodsClass": [
+        {
+          "name": "statusChange",
+          "args": [
+            {
+              "name": "otherStatus",
+              "type": "string",
+              "deprecated": false,
+              "deprecationMessage": ""
+            }
+          ],
+          "optional": false,
+          "returnType": "void",
+          "typeParameters": [],
+          "line": 34,
+          "deprecated": false,
+          "deprecationMessage": "",
+          "jsdoctags": [
+            {
+              "name": "otherStatus",
+              "type": "string",
+              "deprecated": false,
+              "deprecationMessage": "",
+              "tagName": {
+                "text": "param"
+              }
+            }
+          ]
+        },
+        {
+          "name": "updateRemainingSeconds",
+          "args": [
+            {
+              "name": "secondsRemained",
+              "type": "number",
+              "deprecated": false,
+              "deprecationMessage": ""
+            }
+          ],
+          "optional": false,
+          "returnType": "void",
+          "typeParameters": [],
+          "line": 38,
+          "deprecated": false,
+          "deprecationMessage": "",
+          "jsdoctags": [
+            {
+              "name": "secondsRemained",
+              "type": "number",
+              "deprecated": false,
+              "deprecationMessage": "",
+              "tagName": {
+                "text": "param"
+              }
+            }
+          ]
+        }
+      ],
       "deprecated": false,
       "deprecationMessage": "",
       "hostBindings": [],
@@ -485,7 +601,7 @@
       "description": "",
       "rawdescription": "\n",
       "type": "component",
-      "sourceCode": "import { ChangeDetectionStrategy, Component, Input } from '@angular/core'\n\n@Component({\n  selector: 'app-timer-shell',\n  template: `\n    <div class=\"h-full bg-sky-400 flex flex-col justify-center\">\n      <div>\n        <app-timer-message class=\"mb-6\" [status]=\"status\"></app-timer-message>\n        <app-timer-display class=\"mb-8\" [totalSeconds]=\"totalSeconds\"></app-timer-display>\n        <app-timer-buttons></app-timer-buttons>\n      </div>\n    </div>\n  `,\n  styles: [\n    `\n      :host {\n        display: block;\n        height: 100vh;\n      }\n    `,\n  ],\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class TimerShellComponent {\n  @Input()\n  totalSeconds = 900\n\n  status = 'STOP'\n}\n",
+      "sourceCode": "import { ChangeDetectionStrategy, Component, Input } from '@angular/core'\n\n@Component({\n  selector: 'app-timer-shell',\n  template: `\n    <div class=\"h-full bg-sky-400 flex flex-col justify-center\">\n      <div>\n        <app-timer-message class=\"mb-6\" [status]=\"status\"></app-timer-message>\n        <app-timer-display class=\"mb-8\" [totalSeconds]=\"totalSeconds\"></app-timer-display>\n        <app-timer-buttons\n          [countDownSeconds]=\"totalSeconds\"\n          (statusChange)=\"statusChange($event)\"\n          (updateRemainingSeconds)=\"updateRemainingSeconds($event)\"\n        ></app-timer-buttons>\n      </div>\n    </div>\n  `,\n  styles: [\n    `\n      :host {\n        display: block;\n        height: 100vh;\n      }\n    `,\n  ],\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class TimerShellComponent {\n  @Input()\n  totalSeconds = 900\n\n  status = 'STOP'\n\n  statusChange(otherStatus: string) {\n    this.status = otherStatus\n  }\n\n  updateRemainingSeconds(secondsRemained: number) {\n    this.totalSeconds = secondsRemained\n  }\n}\n",
       "assetsDirs": [],
       "styleUrlsData": "",
       "stylesData": "\n      :host {\n        display: block;\n        height: 100vh;\n      }\n    \n"
@@ -787,7 +903,17 @@
         "deprecated": false,
         "deprecationMessage": "",
         "type": "object",
-        "defaultValue": "{\n  statusChange: action('statusChange'),\n  resetTimer: action('resetTimer'),\n  updateRemainingSeconds: action('updateRemainingSeconds'),\n}"
+        "defaultValue": "{\n  statusChange: action('statusChange'),\n  updateRemainingSeconds: action('updateRemainingSeconds'),\n}"
+      },
+      {
+        "name": "BUTTON_STATE_MAP",
+        "ctype": "miscellaneous",
+        "subtype": "variable",
+        "file": "src/app/timer/timer-buttons/timer-buttons.constant.ts",
+        "deprecated": false,
+        "deprecationMessage": "",
+        "type": "object",
+        "defaultValue": "{\n  [STATUS.RUNNING]: [STATUS.STOP, STATUS.PAUSE],\n  [STATUS.PAUSE]: [STATUS.RUNNING, STATUS.STOP],\n  [STATUS.STOP]: [STATUS.RUNNING],\n}"
       },
       {
         "name": "context",
@@ -873,16 +999,6 @@
         "name": "Primary",
         "ctype": "miscellaneous",
         "subtype": "variable",
-        "file": "src/app/timer/timer-buttons/time-butons.stories.ts",
-        "deprecated": false,
-        "deprecationMessage": "",
-        "type": "",
-        "defaultValue": "Template.bind({})"
-      },
-      {
-        "name": "Primary",
-        "ctype": "miscellaneous",
-        "subtype": "variable",
         "file": "src/app/timer/timer-display/timer-display.stories.ts",
         "deprecated": false,
         "deprecationMessage": "",
@@ -894,6 +1010,16 @@
         "ctype": "miscellaneous",
         "subtype": "variable",
         "file": "src/app/timer/timer-shell/timer-shell.stories.ts",
+        "deprecated": false,
+        "deprecationMessage": "",
+        "type": "",
+        "defaultValue": "Template.bind({})"
+      },
+      {
+        "name": "QuickPrimary",
+        "ctype": "miscellaneous",
+        "subtype": "variable",
+        "file": "src/app/timer/timer-buttons/time-butons.stories.ts",
         "deprecated": false,
         "deprecationMessage": "",
         "type": "",
@@ -942,21 +1068,31 @@
         "name": "Template",
         "ctype": "miscellaneous",
         "subtype": "variable",
-        "file": "src/app/timer/timer-buttons/time-butons.stories.ts",
-        "deprecated": false,
-        "deprecationMessage": "",
-        "type": "Story<TimerButtonsComponent>",
-        "defaultValue": "(args: TimerButtonsComponent) => ({\n  props: {\n    ...args,\n    statusChange: ActionsData.statusChange,\n    resetTimer: ActionsData.resetTimer,\n    updateRemainingSeconds: ActionsData.updateRemainingSeconds,\n  },\n})"
-      },
-      {
-        "name": "Template",
-        "ctype": "miscellaneous",
-        "subtype": "variable",
         "file": "src/app/timer/timer-display/timer-display.stories.ts",
         "deprecated": false,
         "deprecationMessage": "",
         "type": "Story<TimerDisplayComponent>",
         "defaultValue": "(args: TimerDisplayComponent) => ({\n  props: args,\n})"
+      },
+      {
+        "name": "Template",
+        "ctype": "miscellaneous",
+        "subtype": "variable",
+        "file": "src/app/timer/timer-shell/timer-shell.stories.ts",
+        "deprecated": false,
+        "deprecationMessage": "",
+        "type": "Story<TimerShellComponent>",
+        "defaultValue": "(args: TimerShellComponent) => ({\n  props: args,\n})"
+      },
+      {
+        "name": "Template",
+        "ctype": "miscellaneous",
+        "subtype": "variable",
+        "file": "src/app/timer/timer-buttons/time-butons.stories.ts",
+        "deprecated": false,
+        "deprecationMessage": "",
+        "type": "Story<TimerButtonsComponent>",
+        "defaultValue": "(args: TimerButtonsComponent) => ({\n  props: {\n    ...args,\n    statusChange: ActionsData.statusChange,\n    updateRemainingSeconds: ActionsData.updateRemainingSeconds,\n  },\n})"
       },
       {
         "name": "Template",
@@ -969,14 +1105,14 @@
         "defaultValue": "(args: TimerMessageComponent) => ({\n  props: args,\n})"
       },
       {
-        "name": "Template",
+        "name": "TwoMinutesTimer",
         "ctype": "miscellaneous",
         "subtype": "variable",
-        "file": "src/app/timer/timer-shell/timer-shell.stories.ts",
+        "file": "src/app/timer/timer-buttons/time-butons.stories.ts",
         "deprecated": false,
         "deprecationMessage": "",
-        "type": "Story<TimerShellComponent>",
-        "defaultValue": "(args: TimerShellComponent) => ({\n  props: args,\n})"
+        "type": "",
+        "defaultValue": "Template.bind({})"
       },
       {
         "name": "Zero",
@@ -1032,10 +1168,10 @@
           "deprecated": false,
           "deprecationMessage": "",
           "type": "object",
-          "defaultValue": "{\n  statusChange: action('statusChange'),\n  resetTimer: action('resetTimer'),\n  updateRemainingSeconds: action('updateRemainingSeconds'),\n}"
+          "defaultValue": "{\n  statusChange: action('statusChange'),\n  updateRemainingSeconds: action('updateRemainingSeconds'),\n}"
         },
         {
-          "name": "Primary",
+          "name": "QuickPrimary",
           "ctype": "miscellaneous",
           "subtype": "variable",
           "file": "src/app/timer/timer-buttons/time-butons.stories.ts",
@@ -1052,7 +1188,29 @@
           "deprecated": false,
           "deprecationMessage": "",
           "type": "Story<TimerButtonsComponent>",
-          "defaultValue": "(args: TimerButtonsComponent) => ({\n  props: {\n    ...args,\n    statusChange: ActionsData.statusChange,\n    resetTimer: ActionsData.resetTimer,\n    updateRemainingSeconds: ActionsData.updateRemainingSeconds,\n  },\n})"
+          "defaultValue": "(args: TimerButtonsComponent) => ({\n  props: {\n    ...args,\n    statusChange: ActionsData.statusChange,\n    updateRemainingSeconds: ActionsData.updateRemainingSeconds,\n  },\n})"
+        },
+        {
+          "name": "TwoMinutesTimer",
+          "ctype": "miscellaneous",
+          "subtype": "variable",
+          "file": "src/app/timer/timer-buttons/time-butons.stories.ts",
+          "deprecated": false,
+          "deprecationMessage": "",
+          "type": "",
+          "defaultValue": "Template.bind({})"
+        }
+      ],
+      "src/app/timer/timer-buttons/timer-buttons.constant.ts": [
+        {
+          "name": "BUTTON_STATE_MAP",
+          "ctype": "miscellaneous",
+          "subtype": "variable",
+          "file": "src/app/timer/timer-buttons/timer-buttons.constant.ts",
+          "deprecated": false,
+          "deprecationMessage": "",
+          "type": "object",
+          "defaultValue": "{\n  [STATUS.RUNNING]: [STATUS.STOP, STATUS.PAUSE],\n  [STATUS.PAUSE]: [STATUS.RUNNING, STATUS.STOP],\n  [STATUS.STOP]: [STATUS.RUNNING],\n}"
         }
       ],
       "src/test.ts": [
@@ -1334,7 +1492,7 @@
         "type": "variable",
         "linktype": "miscellaneous",
         "linksubtype": "variable",
-        "name": "Primary",
+        "name": "QuickPrimary",
         "coveragePercent": 0,
         "coverageCount": "0/1",
         "status": "low"
@@ -1350,12 +1508,41 @@
         "status": "low"
       },
       {
+        "filePath": "src/app/timer/timer-buttons/time-butons.stories.ts",
+        "type": "variable",
+        "linktype": "miscellaneous",
+        "linksubtype": "variable",
+        "name": "TwoMinutesTimer",
+        "coveragePercent": 0,
+        "coverageCount": "0/1",
+        "status": "low"
+      },
+      {
         "filePath": "src/app/timer/timer-buttons/timer-buttons.component.ts",
         "type": "component",
         "linktype": "component",
         "name": "TimerButtonsComponent",
         "coveragePercent": 0,
-        "coverageCount": "0/15",
+        "coverageCount": "0/16",
+        "status": "low"
+      },
+      {
+        "filePath": "src/app/timer/timer-buttons/timer-buttons.constant.ts",
+        "type": "variable",
+        "linktype": "miscellaneous",
+        "linksubtype": "variable",
+        "name": "BUTTON_STATE_MAP",
+        "coveragePercent": 0,
+        "coverageCount": "0/1",
+        "status": "low"
+      },
+      {
+        "filePath": "src/app/timer/timer-buttons/timer-buttons.interface.ts",
+        "type": "interface",
+        "linktype": "interface",
+        "name": "ButtonActions",
+        "coveragePercent": 0,
+        "coverageCount": "0/3",
         "status": "low"
       },
       {
@@ -1490,7 +1677,7 @@
         "linktype": "component",
         "name": "TimerShellComponent",
         "coveragePercent": 0,
-        "coverageCount": "0/3",
+        "coverageCount": "0/5",
         "status": "low"
       },
       {
