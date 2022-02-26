@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, ViewChild, OnInit, ElementRef, OnDestroy, Output, EventEmitter, Input } from '@angular/core'
 import { faPlay, faStop, faPause } from '@fortawesome/free-solid-svg-icons'
-import { EMPTY, fromEvent, mapTo, merge, repeat, scan, startWith, Subscription, switchMap, takeWhile, tap, timer } from 'rxjs'
+import { EMPTY, fromEvent, mapTo, merge, repeat, scan, startWith, Subscription, switchMap, takeUntil, takeWhile, tap, timer } from 'rxjs'
 import { STATUS } from '../enums'
 
 @Component({
@@ -52,7 +52,10 @@ export class TimerButtonsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     const btnStartClicked$ = fromEvent(this.btnStart.nativeElement, 'click').pipe(mapTo(STATUS.RUNNING))
-    const btnStopClicked$ = fromEvent(this.btnStop.nativeElement, 'click').pipe(mapTo(STATUS.STOP))
+    const btnStopClicked$ = fromEvent(this.btnStop.nativeElement, 'click').pipe(
+      mapTo(STATUS.STOP),
+      tap(() => this.statusChange.emit(STATUS.STOP)),
+    )
     const btnPauseClicked$ = fromEvent(this.btnPause.nativeElement, 'click').pipe(mapTo(STATUS.PAUSE))
 
     const timerStream$ = merge(btnStartClicked$, btnPauseClicked$).pipe(
@@ -66,8 +69,9 @@ export class TimerButtonsComponent implements OnInit, OnDestroy {
       mapTo(-1),
       scan((acc, value) => acc + value, this.countDownSeconds),
       takeWhile((value) => value >= 0),
-      repeat(),
+      takeUntil(btnStopClicked$),
       startWith(this.countDownSeconds),
+      repeat(),
     )
 
     // https://stackoverflow.com/questions/69945765/rxjs-way-to-unsubscribe-after-button-click-but-with-opportunity-to-subscribe-aga
@@ -76,25 +80,7 @@ export class TimerButtonsComponent implements OnInit, OnDestroy {
       this.updateRemainingSeconds.emit(value)
     })
 
-    const btnStopSubscription = btnStopClicked$
-      .pipe(
-        tap(() => {
-          this.statusChange.emit(STATUS.STOP)
-
-          // unsubscribe timer
-          subscription.unsubscribe()
-          // resubscribe timer
-          subscription = new Subscription()
-          subscription.add(
-            timerStream$.subscribe((value) => {
-              this.updateRemainingSeconds.emit(value)
-            }),
-          )
-        }),
-      )
-      .subscribe()
-
-    this.subscriptions.push(subscription, btnStopSubscription)
+    this.subscriptions.push(subscription)
   }
 
   ngOnDestroy(): void {
