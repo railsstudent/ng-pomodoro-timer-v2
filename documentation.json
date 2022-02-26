@@ -1068,26 +1068,6 @@
         "name": "Template",
         "ctype": "miscellaneous",
         "subtype": "variable",
-        "file": "src/app/timer/timer-display/timer-display.stories.ts",
-        "deprecated": false,
-        "deprecationMessage": "",
-        "type": "Story<TimerDisplayComponent>",
-        "defaultValue": "(args: TimerDisplayComponent) => ({\n  props: args,\n})"
-      },
-      {
-        "name": "Template",
-        "ctype": "miscellaneous",
-        "subtype": "variable",
-        "file": "src/app/timer/timer-shell/timer-shell.stories.ts",
-        "deprecated": false,
-        "deprecationMessage": "",
-        "type": "Story<TimerShellComponent>",
-        "defaultValue": "(args: TimerShellComponent) => ({\n  props: args,\n})"
-      },
-      {
-        "name": "Template",
-        "ctype": "miscellaneous",
-        "subtype": "variable",
         "file": "src/app/timer/timer-buttons/time-butons.stories.ts",
         "deprecated": false,
         "deprecationMessage": "",
@@ -1098,11 +1078,31 @@
         "name": "Template",
         "ctype": "miscellaneous",
         "subtype": "variable",
+        "file": "src/app/timer/timer-display/timer-display.stories.ts",
+        "deprecated": false,
+        "deprecationMessage": "",
+        "type": "Story<TimerDisplayComponent>",
+        "defaultValue": "(args: TimerDisplayComponent) => ({\n  props: args,\n})"
+      },
+      {
+        "name": "Template",
+        "ctype": "miscellaneous",
+        "subtype": "variable",
         "file": "src/app/timer/timer-message/timer-message.stories.ts",
         "deprecated": false,
         "deprecationMessage": "",
         "type": "Story<TimerMessageComponent>",
         "defaultValue": "(args: TimerMessageComponent) => ({\n  props: args,\n})"
+      },
+      {
+        "name": "Template",
+        "ctype": "miscellaneous",
+        "subtype": "variable",
+        "file": "src/app/timer/timer-shell/timer-shell.stories.ts",
+        "deprecated": false,
+        "deprecationMessage": "",
+        "type": "Story<TimerShellComponent>",
+        "defaultValue": "(args: TimerShellComponent) => ({\n  props: args,\n})"
       },
       {
         "name": "TwoMinutesTimer",

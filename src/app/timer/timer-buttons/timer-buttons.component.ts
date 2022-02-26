@@ -29,12 +29,15 @@ import { ButtonActions } from './timer-buttons.interface'
       <div class="spacer flex justify-evenly">
         <button class="start button" aria-label="start timer" #start>
           <fa-icon [icon]="faPlay"></fa-icon>
+          <ng-container #play></ng-container>
         </button>
         <button class="pause button" aria-label="pause timer" #pause>
           <fa-icon [icon]="faPause"></fa-icon>
+          <ng-container #pause></ng-container>
         </button>
         <button class="stop button" aria-label="stop timer" #stop>
           <fa-icon [icon]="faStop"></fa-icon>
+          <ng-container #stop></ng-container>
         </button>
       </div>
       <span class="spacer"></span>
