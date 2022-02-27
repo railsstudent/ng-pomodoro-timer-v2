@@ -7,11 +7,8 @@
 }
 
 .button {
-  @apply bg-black;
-  @apply p-4;
-  @apply text-white;
-  @apply rounded-lg;
+  @apply flex justify-center items-center;
+  @apply bg-gray-600 hover:bg-gray-700 p-4 text-white rounded-lg;
   width: 45px;
   height: 45px;
-  @apply flex justify-center items-center;
 }

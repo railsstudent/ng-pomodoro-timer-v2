@@ -103,13 +103,17 @@ export class TimerButtonsComponent implements OnInit, OnDestroy {
     this.subscription = this.createTimerSubscription()
   }
 
+  private clickEventMapTo(elementRef: ElementRef, status: STATUS) {
+    return fromEvent(elementRef.nativeElement, 'click').pipe(mapTo(status))
+  }
+
   private createTimerSubscription() {
-    const btnStartClicked$ = fromEvent(this.btnStart.nativeElement, 'click').pipe(mapTo(STATUS.RUNNING))
+    const btnStartClicked$ = this.clickEventMapTo(this.btnStart, STATUS.RUNNING)
     const btnStopClicked$ = fromEvent(this.btnStop.nativeElement, 'click').pipe(
       mapTo(STATUS.STOP),
       tap(() => this.statusChange.emit(STATUS.STOP)),
     )
-    const btnPauseClicked$ = fromEvent(this.btnPause.nativeElement, 'click').pipe(mapTo(STATUS.PAUSE))
+    const btnPauseClicked$ = this.clickEventMapTo(this.btnPause, STATUS.PAUSE)
 
     const initialState: ButtonActions = { status: undefined, previousStatus: undefined }
     return merge(btnStartClicked$, btnPauseClicked$)
@@ -142,11 +146,11 @@ export class TimerButtonsComponent implements OnInit, OnDestroy {
   }
 
   async setupIcons() {
-    const { faPlay, faPause, faStop } = await import('@fortawesome/free-solid-svg-icons')
+    const { faPlay, faPause, faUndo } = await import('@fortawesome/free-solid-svg-icons')
     const componentRefs = await Promise.all([
       this.renderIcon(this.playRef, faPlay),
       this.renderIcon(this.pauseRef, faPause),
-      this.renderIcon(this.stopRef, faStop),
+      this.renderIcon(this.stopRef, faUndo),
     ])
 
     this.componentRefs.push(...componentRefs)
