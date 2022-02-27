@@ -14,21 +14,21 @@ import {
   ComponentRef,
 } from '@angular/core'
 import {
-  EMPTY,
   filter,
   fromEvent,
   map,
   mapTo,
   merge,
+  NEVER,
+  of,
   repeat,
   scan,
   startWith,
   Subscription,
   switchMap,
-  takeUntil,
   takeWhile,
-  tap,
   timer,
+  withLatestFrom,
 } from 'rxjs'
 import { STATUS } from '../enums'
 import { BUTTON_STATE_MAP } from './timer-buttons.constant'
@@ -108,25 +108,33 @@ export class TimerButtonsComponent implements OnInit, OnDestroy {
   }
 
   private createTimerSubscription() {
-    const btnStartClicked$ = this.clickEventMapTo(this.btnStart, STATUS.RUNNING)
-    const btnStopClicked$ = fromEvent(this.btnStop.nativeElement, 'click').pipe(
-      mapTo(STATUS.STOP),
-      tap(() => this.statusChange.emit(STATUS.STOP)),
-    )
-    const btnPauseClicked$ = this.clickEventMapTo(this.btnPause, STATUS.PAUSE)
+    const initialState: ButtonActions = { status: STATUS.STOP, previousStatus: undefined }
+    const oneSecond = 1000
+    const countDownInterval = -1
 
-    const initialState: ButtonActions = { status: undefined, previousStatus: undefined }
-    return merge(btnStartClicked$, btnPauseClicked$)
+    const btnStartClicked$ = this.clickEventMapTo(this.btnStart, STATUS.RUNNING)
+    const btnStopClicked$ = this.clickEventMapTo(this.btnStop, STATUS.STOP)
+    const btnPauseClicked$ = this.clickEventMapTo(this.btnPause, STATUS.PAUSE)
+    const buttonClicked$ = merge(btnStartClicked$, btnPauseClicked$, btnStopClicked$)
+
+    return buttonClicked$
       .pipe(
         scan((acc: ButtonActions, value: STATUS) => this.updateNextMove(acc, value), initialState),
         filter((buttonActions) => this.isButtonActionAllowed(buttonActions)),
-        map((buttonActions) => buttonActions.status || STATUS.PAUSE),
-        tap((status) => this.statusChange.emit(status)),
-        switchMap((status) => (status === STATUS.RUNNING ? timer(0, 1000) : EMPTY)),
-        mapTo(-1),
-        scan((acc, value) => acc + value, this.countDownSeconds),
+        map((buttonActions) => buttonActions.status),
+        switchMap((status) => {
+          this.statusChange.emit(status)
+          if (status === STATUS.STOP) {
+            return of(this.countDownSeconds)
+          } else if (status === STATUS.RUNNING) {
+            return timer(0, oneSecond)
+          }
+          return NEVER
+        }),
+        withLatestFrom(buttonClicked$),
+        switchMap(([resetSeconds, state]) => of(state === STATUS.STOP ? resetSeconds : countDownInterval)),
+        scan((acc, value) => (countDownInterval === value ? acc + value : value), this.countDownSeconds),
         takeWhile((value) => value >= 0),
-        takeUntil(btnStopClicked$),
         startWith(this.countDownSeconds),
         repeat(),
       )

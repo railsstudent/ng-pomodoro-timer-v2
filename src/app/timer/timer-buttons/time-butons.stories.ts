@@ -34,8 +34,8 @@ TwoMinutesTimer.args = {
   debugMode: true,
 }
 
-export const QuickPrimary = Template.bind({})
-QuickPrimary.args = {
+export const TwentySecondsTimer = Template.bind({})
+TwentySecondsTimer.args = {
   countDownSeconds: 20,
   debugMode: true,
 }
