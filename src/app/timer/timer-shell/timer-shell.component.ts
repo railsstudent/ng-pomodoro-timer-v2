@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core'
+import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core'
 
 @Component({
   selector: 'app-timer-shell',
@@ -6,7 +6,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core'
     <div class="h-full bg-sky-400 flex flex-col justify-center">
       <div>
         <app-timer-message class="mb-6" [status]="status"></app-timer-message>
-        <app-timer-display class="mb-8" [totalSeconds]="totalSeconds"></app-timer-display>
+        <app-timer-display class="mb-8" [totalSeconds]="displaySeconds"></app-timer-display>
         <app-timer-buttons
           [countDownSeconds]="totalSeconds"
           (statusChange)="statusChange($event)"
@@ -25,17 +25,23 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core'
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TimerShellComponent {
+export class TimerShellComponent implements OnInit {
   @Input()
   totalSeconds = 900
 
   status = 'STOP'
+
+  displaySeconds: number
+
+  ngOnInit(): void {
+    this.displaySeconds = this.totalSeconds
+  }
 
   statusChange(otherStatus: string) {
     this.status = otherStatus
   }
 
   updateRemainingSeconds(secondsRemained: number) {
-    this.totalSeconds = secondsRemained
+    this.displaySeconds = secondsRemained
   }
 }
