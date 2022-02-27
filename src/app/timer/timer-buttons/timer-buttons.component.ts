@@ -1,5 +1,18 @@
-import { Component, ChangeDetectionStrategy, ViewChild, OnInit, ElementRef, OnDestroy, Output, EventEmitter, Input } from '@angular/core'
-import { faPlay, faStop, faPause } from '@fortawesome/free-solid-svg-icons'
+import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
+import {
+  Component,
+  ChangeDetectionStrategy,
+  ViewChild,
+  OnInit,
+  ElementRef,
+  OnDestroy,
+  Output,
+  EventEmitter,
+  Input,
+  ViewContainerRef,
+  ChangeDetectorRef,
+  ComponentRef,
+} from '@angular/core'
 import {
   EMPTY,
   filter,
@@ -30,16 +43,13 @@ import { ButtonActions } from './timer-buttons.interface'
       </span>
       <div class="spacer flex justify-evenly">
         <button class="start button" aria-label="start timer" #start>
-          <fa-icon [icon]="faPlay"></fa-icon>
-          <ng-container #play></ng-container>
+          <ng-container #playRef></ng-container>
         </button>
         <button class="pause button" aria-label="pause timer" #pause>
-          <fa-icon [icon]="faPause"></fa-icon>
-          <ng-container #pause></ng-container>
+          <ng-container #pauseRef></ng-container>
         </button>
         <button class="stop button" aria-label="stop timer" #stop>
-          <fa-icon [icon]="faStop"></fa-icon>
-          <ng-container #stop></ng-container>
+          <ng-container #stopRef></ng-container>
         </button>
       </div>
       <span class="spacer"></span>
@@ -49,10 +59,6 @@ import { ButtonActions } from './timer-buttons.interface'
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TimerButtonsComponent implements OnInit, OnDestroy {
-  faPlay = faPlay
-  faStop = faStop
-  faPause = faPause
-
   @ViewChild('start', { read: ElementRef, static: true })
   btnStart: ElementRef
 
@@ -61,6 +67,15 @@ export class TimerButtonsComponent implements OnInit, OnDestroy {
 
   @ViewChild('pause', { read: ElementRef, static: true })
   btnPause: ElementRef
+
+  @ViewChild('playRef', { read: ViewContainerRef, static: true })
+  playRef: ViewContainerRef
+
+  @ViewChild('pauseRef', { read: ViewContainerRef, static: true })
+  pauseRef: ViewContainerRef
+
+  @ViewChild('stopRef', { read: ViewContainerRef, static: true })
+  stopRef: ViewContainerRef
 
   @Input()
   countDownSeconds: number
@@ -78,8 +93,14 @@ export class TimerButtonsComponent implements OnInit, OnDestroy {
 
   value: number
 
-  ngOnInit(): void {
+  componentRefs: ComponentRef<unknown>[] = []
+
+  constructor(private cdr: ChangeDetectorRef) {}
+
+  async ngOnInit(): Promise<void> {
     this.value = this.countDownSeconds
+
+    await this.setupIcons()
 
     const btnStartClicked$ = fromEvent(this.btnStart.nativeElement, 'click').pipe(mapTo(STATUS.RUNNING))
     const btnStopClicked$ = fromEvent(this.btnStop.nativeElement, 'click').pipe(
@@ -118,6 +139,33 @@ export class TimerButtonsComponent implements OnInit, OnDestroy {
       })
   }
 
+  async setupIcons() {
+    const faPlay = (await import('@fortawesome/free-solid-svg-icons')).faPlay
+    const faPause = (await import('@fortawesome/free-solid-svg-icons')).faPause
+    const faStop = (await import('@fortawesome/free-solid-svg-icons')).faStop
+
+    const componentRefs = await Promise.all([
+      this.renderIcon(this.playRef, faPlay),
+      this.renderIcon(this.pauseRef, faPause),
+      this.renderIcon(this.stopRef, faStop),
+    ])
+
+    this.componentRefs.push(...componentRefs)
+    this.cdr.detectChanges()
+  }
+
+  private async renderIcon(vcf: ViewContainerRef, icon: IconDefinition) {
+    if (vcf) {
+      vcf.clear()
+    }
+
+    const FaIconComponent = (await import('@fortawesome/angular-fontawesome')).FaIconComponent
+    const componentRef = vcf.createComponent(FaIconComponent)
+    componentRef.instance.icon = icon
+    componentRef.instance.render()
+    return componentRef
+  }
+
   isButtonActionAllowed({ status, previousStatus }: ButtonActions) {
     if (!status) {
       return false
@@ -133,6 +181,12 @@ export class TimerButtonsComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     if (this.subscription) {
       this.subscription.unsubscribe()
+    }
+
+    for (const ref of this.componentRefs) {
+      if (ref && ref.destroy) {
+        ref.destroy()
+      }
     }
   }
 }
