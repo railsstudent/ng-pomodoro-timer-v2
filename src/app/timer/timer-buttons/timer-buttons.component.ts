@@ -99,9 +99,11 @@ export class TimerButtonsComponent implements OnInit, OnDestroy {
 
   async ngOnInit(): Promise<void> {
     this.value = this.countDownSeconds
-
     await this.setupIcons()
+    this.subscription = this.createTimerSubscription()
+  }
 
+  private createTimerSubscription() {
     const btnStartClicked$ = fromEvent(this.btnStart.nativeElement, 'click').pipe(mapTo(STATUS.RUNNING))
     const btnStopClicked$ = fromEvent(this.btnStop.nativeElement, 'click').pipe(
       mapTo(STATUS.STOP),
@@ -109,20 +111,13 @@ export class TimerButtonsComponent implements OnInit, OnDestroy {
     )
     const btnPauseClicked$ = fromEvent(this.btnPause.nativeElement, 'click').pipe(mapTo(STATUS.PAUSE))
 
-    this.subscription = merge(btnStartClicked$, btnPauseClicked$)
+    const initialState: ButtonActions = { status: undefined, previousStatus: undefined }
+    return merge(btnStartClicked$, btnPauseClicked$)
       .pipe(
-        scan(
-          (acc: ButtonActions, status) => ({
-            status,
-            previousStatus: acc.status,
-          }),
-          { status: undefined, previousStatus: undefined },
-        ),
+        scan((acc: ButtonActions, value: STATUS) => this.updateNextMove(acc, value), initialState),
         filter((buttonActions) => this.isButtonActionAllowed(buttonActions)),
         map((buttonActions) => buttonActions.status || STATUS.PAUSE),
-        tap((status) => {
-          this.statusChange.emit(status)
-        }),
+        tap((status) => this.statusChange.emit(status)),
         switchMap((status) => (status === STATUS.RUNNING ? timer(0, 1000) : EMPTY)),
         mapTo(-1),
         scan((acc, value) => acc + value, this.countDownSeconds),
@@ -139,11 +134,15 @@ export class TimerButtonsComponent implements OnInit, OnDestroy {
       })
   }
 
-  async setupIcons() {
-    const faPlay = (await import('@fortawesome/free-solid-svg-icons')).faPlay
-    const faPause = (await import('@fortawesome/free-solid-svg-icons')).faPause
-    const faStop = (await import('@fortawesome/free-solid-svg-icons')).faStop
+  private updateNextMove(acc: ButtonActions, status: STATUS): ButtonActions {
+    return {
+      status,
+      previousStatus: acc.status,
+    }
+  }
 
+  async setupIcons() {
+    const { faPlay, faPause, faStop } = await import('@fortawesome/free-solid-svg-icons')
     const componentRefs = await Promise.all([
       this.renderIcon(this.playRef, faPlay),
       this.renderIcon(this.pauseRef, faPause),
