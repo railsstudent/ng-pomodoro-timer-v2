@@ -25,7 +25,9 @@ import { ButtonActions } from './timer-buttons.interface'
   selector: 'app-timer-buttons',
   template: `
     <div class="flex p-4">
-      <span class="spacer">{{ debugMode ? value : '' }}</span>
+      <span class="spacer">
+        <ng-container *ngIf="debugMode">{{ value || 0 }}</ng-container>
+      </span>
       <div class="spacer flex justify-evenly">
         <button class="start button" aria-label="start timer" #start>
           <fa-icon [icon]="faPlay"></fa-icon>
@@ -77,6 +79,8 @@ export class TimerButtonsComponent implements OnInit, OnDestroy {
   value: number
 
   ngOnInit(): void {
+    this.value = this.countDownSeconds
+
     const btnStartClicked$ = fromEvent(this.btnStart.nativeElement, 'click').pipe(mapTo(STATUS.RUNNING))
     const btnStopClicked$ = fromEvent(this.btnStop.nativeElement, 'click').pipe(
       mapTo(STATUS.STOP),
