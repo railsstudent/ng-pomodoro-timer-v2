@@ -93,7 +93,9 @@ export class TimerButtonsComponent implements OnInit, OnDestroy {
 
   value: number
 
-  componentRefs: ComponentRef<unknown>[] = []
+  playComponentRef: ComponentRef<unknown>
+  pauseComponentRef: ComponentRef<unknown>
+  stopComponentRef: ComponentRef<unknown>
 
   constructor(private cdr: ChangeDetectorRef) {}
 
@@ -161,7 +163,10 @@ export class TimerButtonsComponent implements OnInit, OnDestroy {
       this.renderIcon(this.stopRef, faUndo),
     ])
 
-    this.componentRefs.push(...componentRefs)
+    this.playComponentRef = componentRefs[0]
+    this.pauseComponentRef = componentRefs[1]
+    this.stopComponentRef = componentRefs[2]
+
     this.cdr.detectChanges()
   }
 
@@ -194,10 +199,16 @@ export class TimerButtonsComponent implements OnInit, OnDestroy {
       this.subscription.unsubscribe()
     }
 
-    for (const ref of this.componentRefs) {
-      if (ref && ref.destroy) {
-        ref.destroy()
-      }
+    if (this.playComponentRef && this.playComponentRef.destroy) {
+      this.playComponentRef.destroy()
+    }
+
+    if (this.pauseComponentRef && this.pauseComponentRef.destroy) {
+      this.pauseComponentRef.destroy()
+    }
+
+    if (this.stopComponentRef && this.stopComponentRef.destroy) {
+      this.stopComponentRef.destroy()
     }
   }
 }
