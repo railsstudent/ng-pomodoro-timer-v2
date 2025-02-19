@@ -16,7 +16,6 @@ import {
   filter,
   fromEvent,
   map,
-  mapTo,
   merge,
   NEVER,
   of,
@@ -26,6 +25,7 @@ import {
   Subscription,
   switchMap,
   takeWhile,
+  tap,
   timer,
   withLatestFrom,
 } from 'rxjs'
@@ -103,7 +103,7 @@ export class TimerButtonsComponent implements OnInit, OnDestroy {
   }
 
   private clickEventMapTo(elementRef: ElementRef, status: STATUS) {
-    return fromEvent(elementRef.nativeElement, 'click').pipe(mapTo(status))
+    return fromEvent(elementRef.nativeElement, 'click').pipe(map(() => status))
   }
 
   private createTimerSubscription() {
@@ -121,8 +121,8 @@ export class TimerButtonsComponent implements OnInit, OnDestroy {
         scan((acc: ButtonActions, value: STATUS) => this.updateNextMove(acc, value), initialState),
         filter((buttonActions) => this.isButtonActionAllowed(buttonActions)),
         map((buttonActions) => buttonActions.status),
+        tap((status) => this.statusChange.emit(status)),
         switchMap((status) => {
-          this.statusChange.emit(status)
           if (status === STATUS.STOP) {
             return of(this.countDownSeconds)
           } else if (status === STATUS.RUNNING) {
