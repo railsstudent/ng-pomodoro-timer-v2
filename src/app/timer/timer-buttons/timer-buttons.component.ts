@@ -10,7 +10,6 @@ import {
   EventEmitter,
   Input,
   ViewContainerRef,
-  ChangeDetectorRef,
   ComponentRef,
 } from '@angular/core'
 import {
@@ -97,8 +96,6 @@ export class TimerButtonsComponent implements OnInit, OnDestroy {
   pauseComponentRef: ComponentRef<unknown>
   stopComponentRef: ComponentRef<unknown>
 
-  constructor(private cdr: ChangeDetectorRef) {}
-
   async ngOnInit(): Promise<void> {
     this.value = this.countDownSeconds
     await this.setupIcons()
@@ -166,8 +163,6 @@ export class TimerButtonsComponent implements OnInit, OnDestroy {
     this.playComponentRef = componentRefs[0]
     this.pauseComponentRef = componentRefs[1]
     this.stopComponentRef = componentRefs[2]
-
-    this.cdr.detectChanges()
   }
 
   private async renderIcon(vcf: ViewContainerRef, icon: IconDefinition) {
