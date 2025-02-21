@@ -2,6 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core'
 
 @Pipe({
   name: 'convertSecondsToString',
+  standalone: false,
 })
 export class ConvertSecondsToStringPipe implements PipeTransform {
   private getPrefix(value: number) {

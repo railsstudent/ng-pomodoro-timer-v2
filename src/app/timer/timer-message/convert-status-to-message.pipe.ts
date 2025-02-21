@@ -3,6 +3,7 @@ import { STATUS } from '../enums'
 
 @Pipe({
   name: 'convertStatusToMessage',
+  standalone: false,
 })
 export class ConvertStatusToMessagePipe implements PipeTransform {
   transform(status: string): string {
