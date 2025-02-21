@@ -55,7 +55,7 @@
     "@storybook/addon-postcss": "^2.0.0",
     "@storybook/angular": "^8.5.8",
     "@storybook/builder-webpack5": "^8.5.8",
-    "@storybook/manager-webpack5": "^6.5.16",
+    "@storybook/builder-webpack5": "^6.5.16",
     "@storybook/test": "^8.5.8",
     "@tailwindcss/forms": "^0.4.0",
     "@tailwindcss/typography": "^0.5.1",
