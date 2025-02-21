@@ -8,6 +8,7 @@ import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core
         <app-timer-message class="mb-6" [status]="status"></app-timer-message>
         <app-timer-display class="mb-8" [totalSeconds]="displaySeconds"></app-timer-display>
         <app-timer-buttons
+          [debugMode]="true"
           [countDownSeconds]="totalSeconds"
           (statusChange)="statusChange($event)"
           (updateRemainingSeconds)="updateRemainingSeconds($event)"
