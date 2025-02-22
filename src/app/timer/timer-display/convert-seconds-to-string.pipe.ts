@@ -1,9 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core'
 
-@Pipe({
-  name: 'convertSecondsToString',
-  standalone: false,
-})
+@Pipe({ name: 'convertSecondsToString' })
 export class ConvertSecondsToStringPipe implements PipeTransform {
   private getPrefix(value: number) {
     const ten = 10

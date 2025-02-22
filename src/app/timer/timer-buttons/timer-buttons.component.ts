@@ -2,15 +2,14 @@ import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
 import {
   Component,
   ChangeDetectionStrategy,
-  ViewChild,
   OnInit,
   ElementRef,
   OnDestroy,
-  Output,
-  EventEmitter,
-  Input,
   ViewContainerRef,
   ComponentRef,
+  input,
+  output,
+  viewChild,
 } from '@angular/core'
 import {
   filter,
@@ -38,7 +37,9 @@ import { ButtonActions } from './timer-buttons.interface'
   template: `
     <div class="flex p-4">
       <span class="spacer">
-        <ng-container *ngIf="debugMode">{{ value || 0 }}</ng-container>
+        @if (debugMode()) {
+          {{ value || 0 }}
+        }
       </span>
       <div class="spacer flex justify-evenly">
         <button class="start button" aria-label="start timer" #start>
@@ -56,38 +57,28 @@ import { ButtonActions } from './timer-buttons.interface'
   `,
   styleUrls: ['./timer-buttons.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+  imports: [],
 })
 export class TimerButtonsComponent implements OnInit, OnDestroy {
-  @ViewChild('start', { read: ElementRef, static: true })
-  btnStart: ElementRef
+  readonly btnStart = viewChild.required('start', { read: ElementRef })
 
-  @ViewChild('stop', { read: ElementRef, static: true })
-  btnStop: ElementRef
+  readonly btnStop = viewChild.required('stop', { read: ElementRef })
 
-  @ViewChild('pause', { read: ElementRef, static: true })
-  btnPause: ElementRef
+  readonly btnPause = viewChild.required('pause', { read: ElementRef })
 
-  @ViewChild('playRef', { read: ViewContainerRef, static: true })
-  playRef: ViewContainerRef
+  readonly playRef = viewChild.required('playRef', { read: ViewContainerRef })
 
-  @ViewChild('pauseRef', { read: ViewContainerRef, static: true })
-  pauseRef: ViewContainerRef
+  readonly pauseRef = viewChild.required('pauseRef', { read: ViewContainerRef })
 
-  @ViewChild('stopRef', { read: ViewContainerRef, static: true })
-  stopRef: ViewContainerRef
+  readonly stopRef = viewChild.required('stopRef', { read: ViewContainerRef })
 
-  @Input()
-  countDownSeconds: number
+  readonly countDownSeconds = input.required<number>()
 
-  @Input()
-  debugMode = false
+  readonly debugMode = input(false)
 
-  @Output()
-  statusChange = new EventEmitter<string>()
+  readonly statusChange = output<string>()
 
-  @Output()
-  updateRemainingSeconds = new EventEmitter<number>()
+  readonly updateRemainingSeconds = output<number>()
 
   subscription: Subscription
 
@@ -98,7 +89,7 @@ export class TimerButtonsComponent implements OnInit, OnDestroy {
   stopComponentRef: ComponentRef<unknown>
 
   async ngOnInit(): Promise<void> {
-    this.value = this.countDownSeconds
+    this.value = this.countDownSeconds()
     await this.setupIcons()
     this.subscription = this.createTimerSubscription()
   }
@@ -112,9 +103,9 @@ export class TimerButtonsComponent implements OnInit, OnDestroy {
     const oneSecond = 1000
     const countDownInterval = -1
 
-    const btnStartClicked$ = this.clickEventMapTo(this.btnStart, STATUS.RUNNING)
-    const btnStopClicked$ = this.clickEventMapTo(this.btnStop, STATUS.STOP)
-    const btnPauseClicked$ = this.clickEventMapTo(this.btnPause, STATUS.PAUSE)
+    const btnStartClicked$ = this.clickEventMapTo(this.btnStart(), STATUS.RUNNING)
+    const btnStopClicked$ = this.clickEventMapTo(this.btnStop(), STATUS.STOP)
+    const btnPauseClicked$ = this.clickEventMapTo(this.btnPause(), STATUS.PAUSE)
     const buttonClicked$ = merge(btnStartClicked$, btnPauseClicked$, btnStopClicked$)
 
     return buttonClicked$
@@ -125,7 +116,7 @@ export class TimerButtonsComponent implements OnInit, OnDestroy {
         tap((status) => this.statusChange.emit(status)),
         switchMap((status) => {
           if (status === STATUS.STOP) {
-            return of(this.countDownSeconds)
+            return of(this.countDownSeconds())
           } else if (status === STATUS.RUNNING) {
             return timer(0, oneSecond)
           }
@@ -133,9 +124,9 @@ export class TimerButtonsComponent implements OnInit, OnDestroy {
         }),
         withLatestFrom(buttonClicked$),
         switchMap(([resetSeconds, state]) => of(state === STATUS.STOP ? resetSeconds : countDownInterval)),
-        scan((acc, value) => (countDownInterval === value ? acc + value : value), this.countDownSeconds),
+        scan((acc, value) => (countDownInterval === value ? acc + value : value), this.countDownSeconds()),
         takeWhile((value) => value >= 0),
-        startWith(this.countDownSeconds),
+        startWith(this.countDownSeconds()),
         repeat(),
       )
       .subscribe((value) => {
@@ -156,9 +147,9 @@ export class TimerButtonsComponent implements OnInit, OnDestroy {
   async setupIcons() {
     const { faPlay, faPause, faUndo } = await import('@fortawesome/free-solid-svg-icons')
     const componentRefs = await Promise.all([
-      this.renderIcon(this.playRef, faPlay),
-      this.renderIcon(this.pauseRef, faPause),
-      this.renderIcon(this.stopRef, faUndo),
+      this.renderIcon(this.playRef(), faPlay),
+      this.renderIcon(this.pauseRef(), faPause),
+      this.renderIcon(this.stopRef(), faUndo),
     ])
 
     this.playComponentRef = componentRefs[0]

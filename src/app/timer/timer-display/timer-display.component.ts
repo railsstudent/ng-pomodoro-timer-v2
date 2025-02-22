@@ -1,11 +1,12 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core'
+import { ChangeDetectionStrategy, Component, input } from '@angular/core'
+import { ConvertSecondsToStringPipe } from './convert-seconds-to-string.pipe'
 
 @Component({
   selector: 'app-timer-display',
   template: `
     <div class="p-4">
       <p class="text-[10rem] leading-[4rem] text-pink-800 text-center">
-        {{ totalSeconds | convertSecondsToString }}
+        {{ totalSeconds() | convertSecondsToString }}
       </p>
     </div>
   `,
@@ -17,9 +18,8 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core'
     `,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+  imports: [ConvertSecondsToStringPipe],
 })
 export class TimerDisplayComponent {
-  @Input()
-  totalSeconds: number
+  readonly totalSeconds = input.required<number>()
 }

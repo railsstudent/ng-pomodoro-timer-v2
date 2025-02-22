@@ -1,4 +1,7 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core'
+import { ChangeDetectionStrategy, Component, OnInit, input } from '@angular/core'
+import { TimerMessageComponent } from '../timer-message/timer-message.component'
+import { TimerDisplayComponent } from '../timer-display/timer-display.component'
+import { TimerButtonsComponent } from '../timer-buttons/timer-buttons.component'
 
 @Component({
   selector: 'app-timer-shell',
@@ -9,7 +12,7 @@ import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core
         <app-timer-display class="mb-8" [totalSeconds]="displaySeconds"></app-timer-display>
         <app-timer-buttons
           [debugMode]="true"
-          [countDownSeconds]="totalSeconds"
+          [countDownSeconds]="totalSeconds()"
           (statusChange)="statusChange($event)"
           (updateRemainingSeconds)="updateRemainingSeconds($event)"
         ></app-timer-buttons>
@@ -25,18 +28,17 @@ import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core
     `,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+  imports: [TimerMessageComponent, TimerDisplayComponent, TimerButtonsComponent],
 })
 export class TimerShellComponent implements OnInit {
-  @Input()
-  totalSeconds = 900
+  readonly totalSeconds = input(900)
 
   status = 'STOP'
 
   displaySeconds: number
 
   ngOnInit(): void {
-    this.displaySeconds = this.totalSeconds
+    this.displaySeconds = this.totalSeconds()
   }
 
   statusChange(otherStatus: string) {

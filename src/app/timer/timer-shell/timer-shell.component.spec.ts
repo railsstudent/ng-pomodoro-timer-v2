@@ -8,7 +8,7 @@ describe('TimerShellComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [TimerShellComponent],
+      imports: [TimerShellComponent],
     }).compileComponents()
   })
 

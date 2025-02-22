@@ -1,12 +1,18 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core'
+import { ChangeDetectionStrategy, Component, input } from '@angular/core'
 
 @Component({
   selector: 'app-timer-message',
   template: `
     <div class="my-4 p-3">
-      <p class="text-7xl text-pink-800 text-center" *ngIf="status === 'STOP'">Let the countdown begin!!</p>
-      <p class="text-7xl text-pink-800 text-center" *ngIf="status === 'RUNNING'">Greatness is within sight!!</p>
-      <p class="text-7xl text-pink-800 text-center" *ngIf="status === 'PAUSE'">Never quit keep going!!</p>
+      @if (status() === 'STOP') {
+        <p class="text-7xl text-pink-800 text-center">Let the countdown begin!!</p>
+      }
+      @if (status() === 'RUNNING') {
+        <p class="text-7xl text-pink-800 text-center">Greatness is within sight!!</p>
+      }
+      @if (status() === 'PAUSE') {
+        <p class="text-7xl text-pink-800 text-center">Never quit keep going!!</p>
+      }
     </div>
   `,
   styles: [
@@ -17,9 +23,8 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core'
     `,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false
+  imports: [],
 })
 export class TimerMessageComponent {
-  @Input()
-  status: string
+  readonly status = input<string>()
 }

@@ -8,7 +8,7 @@ describe('TimerMessageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [TimerMessageComponent],
+      imports: [TimerMessageComponent],
     }).compileComponents()
   })
 
