@@ -32,7 +32,7 @@ import { STATUS } from '../status.type'
   imports: [TimerMessageComponent, TimerDisplayComponent, TimerButtonsComponent],
 })
 export class TimerShellComponent {
-  readonly totalSeconds = input(900)
+  readonly totalSeconds = input(60)
   status = signal<STATUS>('STOP')
   displaySeconds = linkedSignal(() => this.totalSeconds())
 }
