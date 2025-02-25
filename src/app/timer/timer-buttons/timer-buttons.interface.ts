@@ -1,4 +1,4 @@
-import { STATUS } from '../enums'
+import { STATUS } from '../status.type'
 
 export interface ButtonActions {
   status: STATUS

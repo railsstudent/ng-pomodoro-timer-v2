@@ -1,16 +1,16 @@
-import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
 import {
-  Component,
   ChangeDetectionStrategy,
-  OnInit,
-  ElementRef,
-  OnDestroy,
-  ViewContainerRef,
+  Component,
   ComponentRef,
+  ElementRef,
   input,
+  OnDestroy,
+  OnInit,
   output,
   viewChild,
+  ViewContainerRef,
 } from '@angular/core'
+import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
 import {
   filter,
   fromEvent,
@@ -28,7 +28,7 @@ import {
   timer,
   withLatestFrom,
 } from 'rxjs'
-import { STATUS } from '../enums'
+import { STATUS } from '../status.type'
 import { BUTTON_STATE_MAP } from './timer-buttons.constant'
 import { ButtonActions } from './timer-buttons.interface'
 
@@ -60,23 +60,14 @@ import { ButtonActions } from './timer-buttons.interface'
 })
 export class TimerButtonsComponent implements OnInit, OnDestroy {
   readonly btnStart = viewChild.required('start', { read: ElementRef })
-
   readonly btnStop = viewChild.required('stop', { read: ElementRef })
-
   readonly btnPause = viewChild.required('pause', { read: ElementRef })
-
   readonly playRef = viewChild.required('playRef', { read: ViewContainerRef })
-
   readonly pauseRef = viewChild.required('pauseRef', { read: ViewContainerRef })
-
   readonly stopRef = viewChild.required('stopRef', { read: ViewContainerRef })
-
   readonly countDownSeconds = input.required<number>()
-
   readonly debugMode = input(false)
-
   readonly statusChange = output<string>()
-
   readonly updateRemainingSeconds = output<number>()
 
   subscription: Subscription
@@ -98,13 +89,13 @@ export class TimerButtonsComponent implements OnInit, OnDestroy {
   }
 
   private createTimerSubscription() {
-    const initialState: ButtonActions = { status: STATUS.STOP, previousStatus: undefined }
+    const initialState: ButtonActions = { status: 'STOP', previousStatus: undefined }
     const oneSecond = 1000
     const countDownInterval = -1
 
-    const btnStartClicked$ = this.clickEventMapTo(this.btnStart(), STATUS.RUNNING)
-    const btnStopClicked$ = this.clickEventMapTo(this.btnStop(), STATUS.STOP)
-    const btnPauseClicked$ = this.clickEventMapTo(this.btnPause(), STATUS.PAUSE)
+    const btnStartClicked$ = this.clickEventMapTo(this.btnStart(), 'RUNNING')
+    const btnStopClicked$ = this.clickEventMapTo(this.btnStop(), 'STOP')
+    const btnPauseClicked$ = this.clickEventMapTo(this.btnPause(), 'PAUSE')
     const buttonClicked$ = merge(btnStartClicked$, btnPauseClicked$, btnStopClicked$)
 
     return buttonClicked$
@@ -114,15 +105,15 @@ export class TimerButtonsComponent implements OnInit, OnDestroy {
         map((buttonActions) => buttonActions.status),
         tap((status) => this.statusChange.emit(status)),
         switchMap((status) => {
-          if (status === STATUS.STOP) {
+          if (status === 'STOP') {
             return of(this.countDownSeconds())
-          } else if (status === STATUS.RUNNING) {
+          } else if (status === 'RUNNING') {
             return timer(0, oneSecond)
           }
           return NEVER
         }),
         withLatestFrom(buttonClicked$),
-        switchMap(([resetSeconds, state]) => of(state === STATUS.STOP ? resetSeconds : countDownInterval)),
+        switchMap(([resetSeconds, state]) => of(state === 'STOP' ? resetSeconds : countDownInterval)),
         scan((acc, value) => (countDownInterval === value ? acc + value : value), this.countDownSeconds()),
         takeWhile((value) => value >= 0),
         startWith(this.countDownSeconds()),
@@ -177,7 +168,7 @@ export class TimerButtonsComponent implements OnInit, OnDestroy {
       const allowedStatus = BUTTON_STATE_MAP[previousStatus]
       return allowedStatus.includes(status)
     }
-    return status == STATUS.RUNNING
+    return status == 'RUNNING'
   }
 
   ngOnDestroy(): void {
