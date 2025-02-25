@@ -1,7 +1,7 @@
-import { ChangeDetectionStrategy, Component, input, linkedSignal, signal } from '@angular/core'
-import { TimerMessageComponent } from '../timer-message/timer-message.component'
-import { TimerDisplayComponent } from '../timer-display/timer-display.component'
-import { TimerButtonsComponent } from '../timer-buttons/timer-buttons.component'
+import { ChangeDetectionStrategy, Component, input, linkedSignal, signal } from '@angular/core';
+import { TimerMessageComponent } from '../timer-message/timer-message.component';
+import { TimerDisplayComponent } from '../timer-display/timer-display.component';
+import { TimerButtonsComponent } from '../timer-buttons/timer-buttons.component';
 
 @Component({
   selector: 'app-timer-shell',
@@ -31,7 +31,7 @@ import { TimerButtonsComponent } from '../timer-buttons/timer-buttons.component'
   imports: [TimerMessageComponent, TimerDisplayComponent, TimerButtonsComponent],
 })
 export class TimerShellComponent {
-  readonly totalSeconds = input(900)
-  status = signal('STOP')
-  displaySeconds = linkedSignal(() => this.totalSeconds())
+  readonly totalSeconds = input(900);
+  status = signal('STOP');
+  displaySeconds = linkedSignal(() => this.totalSeconds());
 }

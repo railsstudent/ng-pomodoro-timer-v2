@@ -1,6 +1,6 @@
-import { STATUS } from '../enums'
+import { STATUS } from '../enums';
 
 export interface ButtonActions {
-  status: STATUS
-  previousStatus?: STATUS
+  status: STATUS;
+  previousStatus?: STATUS;
 }
