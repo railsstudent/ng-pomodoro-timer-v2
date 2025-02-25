@@ -124,7 +124,7 @@ export class TimerButtonsComponent implements OnInit, OnDestroy {
 
     const FaIconComponent = (await import('@fortawesome/angular-fontawesome')).FaIconComponent;
     const componentRef = vcf.createComponent(FaIconComponent);
-    componentRef.instance.icon = icon;
+    componentRef.setInput('icon', icon);
     componentRef.instance.render();
     return componentRef;
   }
