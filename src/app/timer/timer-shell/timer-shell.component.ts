@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit, input } from '@angular/core'
+import { ChangeDetectionStrategy, Component, input, linkedSignal, signal } from '@angular/core'
 import { TimerMessageComponent } from '../timer-message/timer-message.component'
 import { TimerDisplayComponent } from '../timer-display/timer-display.component'
 import { TimerButtonsComponent } from '../timer-buttons/timer-buttons.component'
@@ -8,13 +8,13 @@ import { TimerButtonsComponent } from '../timer-buttons/timer-buttons.component'
   template: `
     <div class="h-full bg-sky-400 flex flex-col justify-center">
       <div>
-        <app-timer-message class="mb-6" [status]="status"></app-timer-message>
-        <app-timer-display class="mb-8" [totalSeconds]="displaySeconds"></app-timer-display>
+        <app-timer-message class="mb-6" [status]="status()"></app-timer-message>
+        <app-timer-display class="mb-8" [totalSeconds]="displaySeconds()"></app-timer-display>
         <app-timer-buttons
           [debugMode]="true"
           [countDownSeconds]="totalSeconds()"
-          (statusChange)="statusChange($event)"
-          (updateRemainingSeconds)="updateRemainingSeconds($event)"
+          (statusChange)="status.set($event)"
+          (updateRemainingSeconds)="displaySeconds.set($event)"
         ></app-timer-buttons>
       </div>
     </div>
@@ -30,22 +30,8 @@ import { TimerButtonsComponent } from '../timer-buttons/timer-buttons.component'
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [TimerMessageComponent, TimerDisplayComponent, TimerButtonsComponent],
 })
-export class TimerShellComponent implements OnInit {
+export class TimerShellComponent {
   readonly totalSeconds = input(900)
-
-  status = 'STOP'
-
-  displaySeconds: number
-
-  ngOnInit(): void {
-    this.displaySeconds = this.totalSeconds()
-  }
-
-  statusChange(otherStatus: string) {
-    this.status = otherStatus
-  }
-
-  updateRemainingSeconds(secondsRemained: number) {
-    this.displaySeconds = secondsRemained
-  }
+  status = signal('STOP')
+  displaySeconds = linkedSignal(() => this.totalSeconds())
 }
