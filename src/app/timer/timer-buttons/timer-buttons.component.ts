@@ -4,6 +4,7 @@ import {
   ComponentRef,
   ElementRef,
   input,
+  linkedSignal,
   OnDestroy,
   OnInit,
   output,
@@ -72,14 +73,13 @@ export class TimerButtonsComponent implements OnInit, OnDestroy {
 
   subscription: Subscription
 
-  value: number
+  value = linkedSignal(() => this.countDownSeconds())
 
   playComponentRef: ComponentRef<unknown>
   pauseComponentRef: ComponentRef<unknown>
   stopComponentRef: ComponentRef<unknown>
 
   async ngOnInit(): Promise<void> {
-    this.value = this.countDownSeconds()
     await this.setupIcons()
     this.subscription = this.createTimerSubscription()
   }
@@ -121,7 +121,7 @@ export class TimerButtonsComponent implements OnInit, OnDestroy {
       )
       .subscribe((value) => {
         if (typeof value === 'number') {
-          this.value = value
+          this.value.set(value)
           this.updateRemainingSeconds.emit(value)
         }
       })
