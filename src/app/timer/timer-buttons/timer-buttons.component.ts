@@ -12,12 +12,16 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
-import { NEVER, of, repeat, scan, startWith, Subscription, switchMap, takeWhile, tap, timer } from 'rxjs';
+import { filter, NEVER, of, repeat, scan, startWith, Subscription, switchMap, takeWhile, tap, timer } from 'rxjs';
 import { STATUS } from '../status.type';
-import { BUTTON_STATE_MAP } from './timer-buttons.constant';
 import { toObservable } from '@angular/core/rxjs-interop';
 
 const oneSecond = 1000;
+const BUTTON_STATE_MAP: Record<STATUS, STATUS[]> = {
+  RUNNING: ['STOP', 'PAUSE'],
+  PAUSE: ['RUNNING', 'STOP'],
+  STOP: ['RUNNING'],
+};
 
 @Component({
   selector: 'app-timer-buttons',
@@ -88,13 +92,12 @@ export class TimerButtonsComponent implements OnInit, OnDestroy {
         switchMap((resetSeconds) => of(this.status() === 'STOP' ? resetSeconds : countDownInterval)),
         scan((acc, value) => (countDownInterval === value ? acc + value : value), this.countDownSeconds()),
         takeWhile((value) => value >= 0),
+        filter((value) => typeof value === 'number'),
         tap((value) => {
-          if (typeof value === 'number') {
-            this.value.set(value);
-            this.updateRemainingSeconds.emit(value);
-            if (value === 0) {
-              this.status.set('STOP');
-            }
+          this.value.set(value);
+          this.updateRemainingSeconds.emit(value);
+          if (value === 0) {
+            this.status.set('STOP');
           }
         }),
         startWith(this.countDownSeconds()),
