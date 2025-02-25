@@ -1,6 +1,6 @@
-import { Meta, moduleMetadata, Story } from '@storybook/angular'
-import { AppComponent } from './app.component'
-import { TimerModule } from './timer'
+import { Meta, moduleMetadata, Story } from '@storybook/angular';
+import { AppComponent } from './app.component';
+import { TimerModule } from './timer';
 
 export default {
   title: 'App Component',
@@ -11,10 +11,10 @@ export default {
       imports: [TimerModule],
     }),
   ],
-} as Meta
+} as Meta;
 
 const Template: Story<AppComponent> = (args: AppComponent) => ({
   props: args,
-})
+});
 
-export const Primary = Template.bind({})
+export const Primary = Template.bind({});

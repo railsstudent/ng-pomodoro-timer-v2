@@ -1,7 +1,7 @@
-import { TimerMessageComponent } from './timer-message.component'
-import { Meta, moduleMetadata, Story } from '@storybook/angular'
-import { STATUS } from '../enums'
-import { ConvertStatusToMessagePipe } from './convert-status-to-message.pipe'
+import { TimerMessageComponent } from './timer-message.component';
+import { Meta, moduleMetadata, Story } from '@storybook/angular';
+import { STATUS } from '../enums';
+import { ConvertStatusToMessagePipe } from './convert-status-to-message.pipe';
 
 export default {
   title: 'Timer Message',
@@ -11,23 +11,23 @@ export default {
       declarations: [ConvertStatusToMessagePipe],
     }),
   ],
-} as Meta
+} as Meta;
 
 const Template: Story<TimerMessageComponent> = (args: TimerMessageComponent) => ({
   props: args,
-})
+});
 
-export const Stop = Template.bind({})
+export const Stop = Template.bind({});
 Stop.args = {
   status: STATUS.STOP,
-}
+};
 
-export const Pause = Template.bind({})
+export const Pause = Template.bind({});
 Pause.args = {
   status: STATUS.PAUSE,
-}
+};
 
-export const Running = Template.bind({})
+export const Running = Template.bind({});
 Running.args = {
   status: STATUS.RUNNING,
-}
+};

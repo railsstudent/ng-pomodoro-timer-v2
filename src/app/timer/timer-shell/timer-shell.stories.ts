@@ -1,6 +1,6 @@
-import { Meta, moduleMetadata, Story } from '@storybook/angular'
-import { TimerModule } from '../timer.module'
-import { TimerShellComponent } from './timer-shell.component'
+import { Meta, moduleMetadata, Story } from '@storybook/angular';
+import { TimerModule } from '../timer.module';
+import { TimerShellComponent } from './timer-shell.component';
 
 export default {
   title: 'Timer Shell',
@@ -10,15 +10,15 @@ export default {
       imports: [TimerModule],
     }),
   ],
-} as Meta
+} as Meta;
 
 const Template: Story<TimerShellComponent> = (args: TimerShellComponent) => ({
   props: args,
-})
+});
 
-export const Primary = Template.bind({})
+export const Primary = Template.bind({});
 
-export const FiveMinutesTimer = Template.bind({})
+export const FiveMinutesTimer = Template.bind({});
 FiveMinutesTimer.args = {
   totalSeconds: 300,
-}
+};
