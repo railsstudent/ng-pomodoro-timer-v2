@@ -2,6 +2,8 @@ import {
   ChangeDetectionStrategy,
   Component,
   ComponentRef,
+  DestroyRef,
+  inject,
   input,
   linkedSignal,
   OnDestroy,
@@ -11,10 +13,10 @@ import {
   viewChild,
   ViewContainerRef,
 } from '@angular/core';
+import { outputFromObservable, takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
-import { filter, NEVER, of, repeat, scan, startWith, Subscription, switchMap, takeWhile, tap, timer } from 'rxjs';
+import { filter, NEVER, of, repeat, scan, shareReplay, startWith, switchMap, takeWhile, tap, timer } from 'rxjs';
 import { STATUS } from '../status.type';
-import { toObservable } from '@angular/core/rxjs-interop';
 
 const oneSecond = 1000;
 const BUTTON_STATE_MAP: Record<STATUS, STATUS[]> = {
@@ -55,32 +57,28 @@ export class TimerButtonsComponent implements OnInit, OnDestroy {
   readonly stopRef = viewChild.required('stopRef', { read: ViewContainerRef });
   readonly countDownSeconds = input.required<number>();
   readonly debugMode = input(false);
-  readonly statusChange = output<STATUS>();
-  readonly updateRemainingSeconds = output<number>();
-
-  subscription: Subscription;
 
   value = linkedSignal(() => this.countDownSeconds());
   status = signal<STATUS>('STOP', {
     equal: (prev, curr) => !BUTTON_STATE_MAP[prev].includes(curr),
   });
-  status$ = toObservable(this.status);
+  status$ = toObservable(this.status).pipe(shareReplay({ bufferSize: 1, refCount: true }));
+
+  readonly statusChange = outputFromObservable(this.status$);
+  readonly updateRemainingSeconds = output<number>();
 
   playComponentRef: ComponentRef<unknown>;
   pauseComponentRef: ComponentRef<unknown>;
   stopComponentRef: ComponentRef<unknown>;
 
+  destroyRef$ = inject(DestroyRef);
+
   async ngOnInit(): Promise<void> {
     await this.setupIcons();
-    this.subscription = this.createTimerSubscription();
-  }
 
-  private createTimerSubscription() {
     const countDownInterval = -1;
-
-    return this.status$
+    this.status$
       .pipe(
-        tap((status) => this.statusChange.emit(status)),
         switchMap((status) => {
           if (status === 'STOP') {
             return of(this.countDownSeconds());
@@ -102,6 +100,7 @@ export class TimerButtonsComponent implements OnInit, OnDestroy {
         }),
         startWith(this.countDownSeconds()),
         repeat(),
+        takeUntilDestroyed(this.destroyRef$),
       )
       .subscribe();
   }
@@ -132,9 +131,9 @@ export class TimerButtonsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
+    // if (this.subscription) {
+    //   this.subscription.unsubscribe();
+    // }
 
     if (this.playComponentRef && this.playComponentRef.destroy) {
       this.playComponentRef.destroy();
