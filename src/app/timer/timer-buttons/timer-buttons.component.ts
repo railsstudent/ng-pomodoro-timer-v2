@@ -57,7 +57,6 @@ import { ButtonActions } from './timer-buttons.interface'
   `,
   styleUrls: ['./timer-buttons.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [],
 })
 export class TimerButtonsComponent implements OnInit, OnDestroy {
   readonly btnStart = viewChild.required('start', { read: ElementRef })
