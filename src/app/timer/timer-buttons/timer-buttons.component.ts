@@ -1,36 +1,29 @@
-import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import {
-  Component,
   ChangeDetectionStrategy,
-  OnInit,
-  ElementRef,
-  OnDestroy,
-  ViewContainerRef,
+  Component,
   ComponentRef,
+  DestroyRef,
+  inject,
   input,
+  linkedSignal,
+  OnDestroy,
+  OnInit,
   output,
+  signal,
   viewChild,
+  ViewContainerRef,
 } from '@angular/core';
-import {
-  filter,
-  fromEvent,
-  map,
-  merge,
-  NEVER,
-  of,
-  repeat,
-  scan,
-  startWith,
-  Subscription,
-  switchMap,
-  takeWhile,
-  tap,
-  timer,
-  withLatestFrom,
-} from 'rxjs';
-import { STATUS } from '../enums';
-import { BUTTON_STATE_MAP } from './timer-buttons.constant';
-import { ButtonActions } from './timer-buttons.interface';
+import { outputFromObservable, takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
+import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
+import { filter, NEVER, of, repeat, scan, shareReplay, startWith, switchMap, takeWhile, timer } from 'rxjs';
+import { STATUS } from '../status.type';
+
+const oneSecond = 1000;
+const BUTTON_STATE_MAP: Record<STATUS, STATUS[]> = {
+  RUNNING: ['STOP', 'PAUSE'],
+  PAUSE: ['RUNNING', 'STOP'],
+  STOP: ['RUNNING'],
+};
 
 @Component({
   selector: 'app-timer-buttons',
@@ -38,17 +31,17 @@ import { ButtonActions } from './timer-buttons.interface';
     <div class="flex p-4">
       <span class="spacer">
         @if (debugMode()) {
-          {{ value || 0 }}
+          {{ value() || 0 }}
         }
       </span>
       <div class="spacer flex justify-evenly">
-        <button class="start button" aria-label="start timer" #start>
+        <button class="start button" aria-label="start timer" (click)="status.set('RUNNING')">
           <ng-container #playRef></ng-container>
         </button>
-        <button class="pause button" aria-label="pause timer" #pause>
+        <button class="pause button" aria-label="pause timer" (click)="status.set('PAUSE')">
           <ng-container #pauseRef></ng-container>
         </button>
-        <button class="stop button" aria-label="stop timer" #stop>
+        <button class="stop button" aria-label="stop timer" (click)="status.set('STOP')">
           <ng-container #stopRef></ng-container>
         </button>
       </div>
@@ -59,88 +52,56 @@ import { ButtonActions } from './timer-buttons.interface';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TimerButtonsComponent implements OnInit, OnDestroy {
-  readonly btnStart = viewChild.required('start', { read: ElementRef });
-
-  readonly btnStop = viewChild.required('stop', { read: ElementRef });
-
-  readonly btnPause = viewChild.required('pause', { read: ElementRef });
-
   readonly playRef = viewChild.required('playRef', { read: ViewContainerRef });
-
   readonly pauseRef = viewChild.required('pauseRef', { read: ViewContainerRef });
-
   readonly stopRef = viewChild.required('stopRef', { read: ViewContainerRef });
-
   readonly countDownSeconds = input.required<number>();
-
   readonly debugMode = input(false);
 
-  readonly statusChange = output<string>();
+  value = linkedSignal(() => this.countDownSeconds());
+  status = signal<STATUS>('STOP', {
+    equal: (prev, curr) => !BUTTON_STATE_MAP[prev].includes(curr),
+  });
+  status$ = toObservable(this.status).pipe(shareReplay({ bufferSize: 1, refCount: true }));
 
+  readonly statusChange = outputFromObservable(this.status$);
   readonly updateRemainingSeconds = output<number>();
-
-  subscription: Subscription;
-
-  value: number;
 
   playComponentRef: ComponentRef<unknown>;
   pauseComponentRef: ComponentRef<unknown>;
   stopComponentRef: ComponentRef<unknown>;
 
+  destroyRef$ = inject(DestroyRef);
+
   async ngOnInit(): Promise<void> {
-    this.value = this.countDownSeconds();
     await this.setupIcons();
-    this.subscription = this.createTimerSubscription();
-  }
 
-  private clickEventMapTo(elementRef: ElementRef, status: STATUS) {
-    return fromEvent(elementRef.nativeElement, 'click').pipe(map(() => status));
-  }
-
-  private createTimerSubscription() {
-    const initialState: ButtonActions = { status: STATUS.STOP, previousStatus: undefined };
-    const oneSecond = 1000;
     const countDownInterval = -1;
-
-    const btnStartClicked$ = this.clickEventMapTo(this.btnStart(), STATUS.RUNNING);
-    const btnStopClicked$ = this.clickEventMapTo(this.btnStop(), STATUS.STOP);
-    const btnPauseClicked$ = this.clickEventMapTo(this.btnPause(), STATUS.PAUSE);
-    const buttonClicked$ = merge(btnStartClicked$, btnPauseClicked$, btnStopClicked$);
-
-    return buttonClicked$
+    this.status$
       .pipe(
-        scan((acc: ButtonActions, value: STATUS) => this.updateNextMove(acc, value), initialState),
-        filter((buttonActions) => this.isButtonActionAllowed(buttonActions)),
-        map((buttonActions) => buttonActions.status),
-        tap((status) => this.statusChange.emit(status)),
         switchMap((status) => {
-          if (status === STATUS.STOP) {
+          if (status === 'STOP') {
             return of(this.countDownSeconds());
-          } else if (status === STATUS.RUNNING) {
+          } else if (status === 'RUNNING') {
             return timer(0, oneSecond);
           }
           return NEVER;
         }),
-        withLatestFrom(buttonClicked$),
-        switchMap(([resetSeconds, state]) => of(state === STATUS.STOP ? resetSeconds : countDownInterval)),
+        switchMap((resetSeconds) => of(this.status() === 'STOP' ? resetSeconds : countDownInterval)),
         scan((acc, value) => (countDownInterval === value ? acc + value : value), this.countDownSeconds()),
         takeWhile((value) => value >= 0),
+        filter((value) => typeof value === 'number'),
         startWith(this.countDownSeconds()),
         repeat(),
+        takeUntilDestroyed(this.destroyRef$),
       )
       .subscribe((value) => {
-        if (typeof value === 'number') {
-          this.value = value;
-          this.updateRemainingSeconds.emit(value);
+        this.updateRemainingSeconds.emit(value);
+        this.value.set(value);
+        if (value === 0) {
+          this.status.set('STOP');
         }
       });
-  }
-
-  private updateNextMove(acc: ButtonActions, status: STATUS): ButtonActions {
-    return {
-      status,
-      previousStatus: acc.status,
-    };
   }
 
   async setupIcons() {
@@ -163,28 +124,12 @@ export class TimerButtonsComponent implements OnInit, OnDestroy {
 
     const FaIconComponent = (await import('@fortawesome/angular-fontawesome')).FaIconComponent;
     const componentRef = vcf.createComponent(FaIconComponent);
-    componentRef.instance.icon = icon;
+    componentRef.setInput('icon', icon);
     componentRef.instance.render();
     return componentRef;
   }
 
-  isButtonActionAllowed({ status, previousStatus }: ButtonActions) {
-    if (!status) {
-      return false;
-    }
-
-    if (previousStatus) {
-      const allowedStatus = BUTTON_STATE_MAP[previousStatus];
-      return allowedStatus.includes(status);
-    }
-    return status == STATUS.RUNNING;
-  }
-
   ngOnDestroy(): void {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
-
     if (this.playComponentRef && this.playComponentRef.destroy) {
       this.playComponentRef.destroy();
     }

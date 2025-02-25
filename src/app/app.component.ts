@@ -6,6 +6,4 @@ import { TimerShellComponent } from './timer/timer-shell/timer-shell.component';
   imports: [TimerShellComponent],
   template: '<app-timer-shell></app-timer-shell>',
 })
-export class AppComponent {
-  title = 'ng-pomodoro-timer-v2.0';
-}
+export class AppComponent {}
