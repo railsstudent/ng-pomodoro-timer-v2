@@ -15,7 +15,7 @@ import {
 } from '@angular/core';
 import { outputFromObservable, takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
-import { filter, NEVER, of, repeat, scan, shareReplay, startWith, switchMap, takeWhile, tap, timer } from 'rxjs';
+import { filter, NEVER, of, repeat, scan, shareReplay, startWith, switchMap, takeWhile, timer } from 'rxjs';
 import { STATUS } from '../status.type';
 
 const oneSecond = 1000;
@@ -91,18 +91,17 @@ export class TimerButtonsComponent implements OnInit, OnDestroy {
         scan((acc, value) => (countDownInterval === value ? acc + value : value), this.countDownSeconds()),
         takeWhile((value) => value >= 0),
         filter((value) => typeof value === 'number'),
-        tap((value) => {
-          this.value.set(value);
-          this.updateRemainingSeconds.emit(value);
-          if (value === 0) {
-            this.status.set('STOP');
-          }
-        }),
         startWith(this.countDownSeconds()),
         repeat(),
         takeUntilDestroyed(this.destroyRef$),
       )
-      .subscribe();
+      .subscribe((value) => {
+        this.updateRemainingSeconds.emit(value);
+        this.value.set(value);
+        if (value === 0) {
+          this.status.set('STOP');
+        }
+      });
   }
 
   async setupIcons() {
@@ -131,10 +130,6 @@ export class TimerButtonsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    // if (this.subscription) {
-    //   this.subscription.unsubscribe();
-    // }
-
     if (this.playComponentRef && this.playComponentRef.destroy) {
       this.playComponentRef.destroy();
     }
