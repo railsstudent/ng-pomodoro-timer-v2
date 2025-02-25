@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core'
+import { STATUS } from '../status.type'
 
 @Component({
   selector: 'app-timer-message',
@@ -26,5 +27,5 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core'
   imports: [],
 })
 export class TimerMessageComponent {
-  readonly status = input<string>()
+  readonly status = input<STATUS>()
 }

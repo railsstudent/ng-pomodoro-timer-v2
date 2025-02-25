@@ -67,7 +67,7 @@ export class TimerButtonsComponent implements OnInit, OnDestroy {
   readonly stopRef = viewChild.required('stopRef', { read: ViewContainerRef })
   readonly countDownSeconds = input.required<number>()
   readonly debugMode = input(false)
-  readonly statusChange = output<string>()
+  readonly statusChange = output<STATUS>()
   readonly updateRemainingSeconds = output<number>()
 
   subscription: Subscription
