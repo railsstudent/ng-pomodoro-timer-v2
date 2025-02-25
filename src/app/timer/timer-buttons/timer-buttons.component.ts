@@ -88,15 +88,19 @@ export class TimerButtonsComponent implements OnInit, OnDestroy {
         switchMap((resetSeconds) => of(this.status() === 'STOP' ? resetSeconds : countDownInterval)),
         scan((acc, value) => (countDownInterval === value ? acc + value : value), this.countDownSeconds()),
         takeWhile((value) => value >= 0),
+        tap((value) => {
+          if (typeof value === 'number') {
+            this.value.set(value)
+            this.updateRemainingSeconds.emit(value)
+            if (value === 0) {
+              this.status.set('STOP')
+            }
+          }
+        }),
         startWith(this.countDownSeconds()),
         repeat(),
       )
-      .subscribe((value) => {
-        if (typeof value === 'number') {
-          this.value.set(value)
-          this.updateRemainingSeconds.emit(value)
-        }
-      })
+      .subscribe()
   }
 
   async setupIcons() {
