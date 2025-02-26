@@ -59,10 +59,19 @@ export class TimerButtonsComponent implements OnInit, OnDestroy {
   readonly debugMode = input(false);
 
   value = linkedSignal(() => this.countDownSeconds());
-  status = signal<STATUS>('STOP', {
-    equal: (prev, curr) => !BUTTON_STATE_MAP[prev].includes(curr),
+  status = signal<STATUS>('STOP');
+  nextStatus = linkedSignal<STATUS, STATUS>({
+    source: this.status,
+    computation: (source, previous) => {
+      if (!previous?.value) {
+        return source;
+      }
+
+      return BUTTON_STATE_MAP[previous.value].includes(source) ? source : previous.value;
+    },
   });
-  status$ = toObservable(this.status).pipe(shareReplay({ bufferSize: 1, refCount: true }));
+
+  status$ = toObservable(this.nextStatus).pipe(shareReplay({ bufferSize: 1, refCount: true }));
 
   readonly statusChange = outputFromObservable(this.status$);
   readonly updateRemainingSeconds = output<number>();
