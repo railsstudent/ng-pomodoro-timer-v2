@@ -36,13 +36,13 @@ const BUTTON_STATE_MAP: Record<STATUS, STATUS[]> = {
       </span>
       <div class="spacer flex justify-evenly">
         <button class="start button" aria-label="start timer" (click)="status.set('RUNNING')">
-          <ng-container #playRef></ng-container>
+          <ng-container #playRef />
         </button>
         <button class="pause button" aria-label="pause timer" (click)="status.set('PAUSE')">
-          <ng-container #pauseRef></ng-container>
+          <ng-container #pauseRef />
         </button>
         <button class="stop button" aria-label="stop timer" (click)="status.set('STOP')">
-          <ng-container #stopRef></ng-container>
+          <ng-container #stopRef />
         </button>
       </div>
       <span class="spacer"></span>

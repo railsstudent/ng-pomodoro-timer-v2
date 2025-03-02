@@ -9,14 +9,14 @@ import { STATUS } from '../status.type';
   template: `
     <div class="h-full bg-sky-400 flex flex-col justify-center">
       <div>
-        <app-timer-message class="mb-6" [status]="status()"></app-timer-message>
-        <app-timer-display class="mb-8" [totalSeconds]="displaySeconds()"></app-timer-display>
+        <app-timer-message class="mb-6" [status]="status()" />
+        <app-timer-display class="mb-8" [totalSeconds]="displaySeconds()" />
         <app-timer-buttons
           [debugMode]="true"
           [countDownSeconds]="totalSeconds()"
           (statusChange)="status.set($event)"
           (updateRemainingSeconds)="displaySeconds.set($event)"
-        ></app-timer-buttons>
+        />
       </div>
     </div>
   `,

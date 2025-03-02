@@ -5,14 +5,17 @@ import { STATUS } from '../status.type';
   selector: 'app-timer-message',
   template: `
     <div class="my-4 p-3">
-      @if (status() === 'STOP') {
-        <p class="text-7xl text-pink-800 text-center">Let the countdown begin!!</p>
-      }
-      @if (status() === 'RUNNING') {
-        <p class="text-7xl text-pink-800 text-center">Greatness is within sight!!</p>
-      }
-      @if (status() === 'PAUSE') {
-        <p class="text-7xl text-pink-800 text-center">Never quit keep going!!</p>
+      @let buttonClasses = 'text-7xl text-pink-800 text-center';
+      @switch (status()) {
+        @case ('STOP') {
+          <p [class]="buttonClasses">Let the countdown begin!!</p>
+        }
+        @case ('RUNNING') {
+          <p [class]="buttonClasses">Greatness is within sight!!</p>
+        }
+        @case ('PAUSE') {
+          <p [class]="buttonClasses">Never quit keep going!!</p>
+        }
       }
     </div>
   `,
